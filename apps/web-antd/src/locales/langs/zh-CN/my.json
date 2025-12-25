@@ -1,0 +1,15 @@
+{
+  "title": "个人中心",
+  "userInfo": {
+    "title": "个人信息"
+  },
+  "securitySetting": {
+    "title": "安全设置",
+    "oldPassword": "原密码",
+    "oldVerifyCode": "原手机验证码"
+  },
+  "avatar": {
+    "uploadTitle": "用户头像",
+    "changeAvatar": "更换头像"
+  }
+}

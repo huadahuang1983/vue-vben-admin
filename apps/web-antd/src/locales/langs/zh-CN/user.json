@@ -1,0 +1,91 @@
+{
+  "title": "用户管理",
+  "deleteUser": "注销",
+  "deleteUserHint": "请确认是否进行账户注销操作？该操作将删除用户信息，您将无法再使用本系统。",
+  "modifyPassword": "修改密码",
+  "modifyUsername": "修改账户",
+  "modifyPhoneNumber": "修改手机号",
+  "configRole": "配置权限",
+  "credentialManager": "凭证管理",
+  "accountManager": "账号管理",
+  "verifyCode": "验证码",
+  "userInfo": {
+    "title": "用户信息",
+    "field": {
+      "phoneNumber": "联系电话",
+      "phoneNumberStatus": "电话状态",
+      "userStatus": "用户状态",
+      "nickname": "昵称",
+      "realName": "真实名称",
+      "idType": "证件类型",
+      "idNumber": "证件号码",
+      "idStatus": "证件状态",
+      "gender": "性别",
+      "birthday": "出生日期",
+      "email": "电子邮箱",
+      "emailStatus": "邮箱状态",
+      "avatar": "头像",
+      "lastLoginIp": "最近登录IP",
+      "lastLoginTime": "最近登录时间",
+      "registerTime": "注册时间",
+      "country": "国家",
+      "locale": "语言",
+      "remark": "备注",
+      "description": "描述"
+    }
+  },
+  "userCredential": {
+    "title": "用户凭证",
+    "accountType": "账号类型",
+    "field": {
+      "userId": "用户编号",
+      "username": "用户名",
+      "phoneNumber": "手机号",
+      "email": "电子邮箱",
+      "password": "密码",
+      "accountEnabled": "启用",
+      "accountNonExpired": "未过期",
+      "accountNonLocked": "未被锁定",
+      "credentialsNonExpired": "凭证未过期",
+      "expireAt": "到期时间",
+      "lastLoginIp": "最近登录IP",
+      "lastLoginTime": "最近登录时间",
+      "remark": "备注"
+    }
+  },
+  "userLogin": {
+    "title": "登录记录",
+    "field": {
+      "userCredentialId": "凭证编号",
+      "userId": "用户编号",
+      "loginName": "登录使用名",
+      "deviceId": "设备编号",
+      "loginIp": "登录IP",
+      "loginTime": "登录时间",
+      "loginLocation": "登录地点",
+      "platformName": "平台名称",
+      "browserName": "浏览器名称",
+      "browserVersion": "浏览器版本",
+      "osName": "操作系统名称",
+      "osVersion": "操作系统版本",
+      "source": "来源"
+    }
+  },
+  "userThirdParty": {
+    "title": "三方用户",
+    "field": {
+      "userId": "用户编号",
+      "uuid": "第三方id",
+      "username": "用户名",
+      "nickname": "用户昵称",
+      "avatar": "用户头像",
+      "blog": "用户网址",
+      "company": "所在公司",
+      "location": "位置",
+      "email": "用户邮箱",
+      "remark": "用户备注",
+      "gender": "性别",
+      "source": "用户来源"
+    }
+  }
+}

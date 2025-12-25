@@ -1,0 +1,81 @@
+{
+  "title": "基础设施",
+  "dataDict": {
+    "title": "数据字典",
+    "itemList": "明细列表",
+    "field": {
+      "dictCode": "代码",
+      "dictName": "名称",
+      "dataValue": "数据",
+      "status": "状态",
+      "parentId": "类型",
+      "parentCode": "类型",
+      "parentName": "类型",
+      "orderNo": "排序",
+      "description": "描述",
+      "remark": "备注"
+    }
+  },
+  "dataDictItem": {
+    "title": "数据字典明细",
+    "field": {
+      "dictCode": "字典代码",
+      "dataCode": "代码",
+      "dataName": "名称",
+      "status": "状态",
+      "orderNo": "排序",
+      "remark": "备注"
+    }
+  },
+  "configParam": {
+    "title": "配置参数",
+    "field": {
+      "paramCode": "代码",
+      "paramName": "名称",
+      "paramType": "类型",
+      "paramValue": "数据",
+      "status": "状态",
+      "remark": "备注"
+    }
+  },
+  "region": {
+    "title": "行政区划",
+    "field": {
+      "regionCode": "代码",
+      "regionName": "名称",
+      "regionLevel": "级别",
+      "parentId": "上级",
+      "parentName": "上级名称",
+      "isLeaf": "是否叶子",
+      "orderNo": "排序",
+      "status": "状态",
+      "remark": "备注"
+    }
+  },
+  "measureUnit": {
+    "title": "计量单位",
+    "field": {
+      "name": "名称",
+      "unitType": "类型",
+      "abbreviation": "简写",
+      "symbol": "符号",
+      "convertUnitName": "换算单位",
+      "convertRatio": "换算比例",
+      "orderNo": "排序",
+      "status": "状态",
+      "remark": "备注"
+    }
+  },
+  "operationLog": {
+    "title": "操作日志",
+    "field": {
+      "title": "标题",
+      "userId": "操作员编号",
+      "operateTime": "操作时间",
+      "ipAddress": "IP地址",
+      "uri": "访问地址",
+      "status": "状态",
+      "errorMessage": "错误信息"
+    }
+  }
+}

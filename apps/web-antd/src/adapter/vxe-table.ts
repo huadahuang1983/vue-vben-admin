@@ -6,6 +6,9 @@ import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
 
 import { Button, Image } from 'ant-design-vue';
 
+import { $t } from '#/locales';
+
+import { DataSizeUtil } from './data-size-util';
 import { useVbenForm } from './form';
 
 setupVbenVxeTable({
@@ -61,6 +64,22 @@ setupVbenVxeTable({
 
     // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
     // vxeUI.formats.add
+    vxeUI.formats.add('dataStorageUnit', {
+      tableCellFormatMethod({ cellValue }) {
+        return DataSizeUtil.format(cellValue);
+      },
+    });
+    vxeUI.formats.add('boolean', {
+      tableCellFormatMethod({ cellValue }) {
+        if (cellValue === null || cellValue === undefined) {
+          return '';
+        }
+        cellValue = String(cellValue).toLowerCase();
+        return cellValue === '0' || cellValue === 'false'
+          ? $t('common.boolean.false')
+          : $t('common.boolean.true');
+      },
+    });
   },
   useVbenForm,
 });

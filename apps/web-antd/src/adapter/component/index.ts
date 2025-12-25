@@ -31,6 +31,8 @@ import { isEmpty } from '@vben/utils';
 
 import { notification } from 'ant-design-vue';
 
+import { DataDictRadioGroup, DataDictSelect } from '#/components';
+
 const AutoComplete = defineAsyncComponent(
   () => import('ant-design-vue/es/auto-complete'),
 );
@@ -332,6 +334,8 @@ export type ComponentType =
   | 'AutoComplete'
   | 'Checkbox'
   | 'CheckboxGroup'
+  | 'DataDictRadioGroup'
+  | 'DataDictSelect'
   | 'DatePicker'
   | 'DefaultButton'
   | 'Divider'
@@ -420,6 +424,8 @@ async function initComponentAdapter() {
     TimePicker,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload: withPreviewUpload(),
+    DataDictRadioGroup,
+    DataDictSelect,
   };
 
   // 将组件注册到全局共享状态中

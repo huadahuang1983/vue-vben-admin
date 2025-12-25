@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "title": "菜单管理",
+    "field": {
+      "name": "名称",
+      "menuType": "类型",
+      "parentId": "上级",
+      "title": "标题",
+      "accessCode": "权限码",
+      "path": "路径",
+      "component": "组件",
+      "icon": "图标",
+      "hiddenInMenu": "是否隐藏",
+      "affixTab": "固定图钉",
+      "redirect": "跳转地址",
+      "keepAlive": "是否页面缓存",
+      "iframeSrc": "iframe地址",
+      "link": "外部链接",
+      "isLeaf": "叶子节点",
+      "orderNo": "排序",
+      "status": "状态",
+      "remark": "备注"
+    },
+    "comment": {
+      "name": "名称",
+      "title": "i18n键值或标题",
+      "component": "views下路径，以/起头，父节点填BasicLayout"
+    }
+  },
+  "role": {
+    "title": "角色管理",
+    "field": {
+      "roleCode": "代码",
+      "roleName": "名称",
+      "status": "状态",
+      "remark": "备注"
+    }
+  }
+}

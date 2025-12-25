@@ -1,0 +1,76 @@
+{
+  "title": "消息管理",
+  "verifyCode": {
+    "receiverRequired": "接收人不能为空"
+  },
+  "messageTemplate": {
+    "title": "消息模板",
+    "field": {
+      "templateCode": "模板代码",
+      "title": "标题",
+      "mediumType": "媒介类型",
+      "messageType": "消息类型",
+      "messageGroup": "消息组",
+      "bizType": "业务类型",
+      "channelId": "通道编号",
+      "outTemplated": "外部编号",
+      "status": "状态",
+      "content": "模板内容",
+      "attachments": "附近",
+      "outTemplateId": "外部模板编号",
+      "enablePending": "是否开启待发",
+      "enableDelivery": "是否开启投递",
+      "deliveryStartTime": "投递起始时间",
+      "deliveryEndTime": "投递结束时间",
+      "isBatchSend": "是否批量发送",
+      "isSeparateSend": "是否单独发送",
+      "param": "参数",
+      "remark": "备注"
+    }
+  },
+  "messageHistory": {
+    "title": "消息记录",
+    "field": {
+      "messageTemplateId": "模板编号",
+      "title": "标题",
+      "mediumType": "媒介类型",
+      "messageType": "消息类型",
+      "messageGroup": "消息分组",
+      "bizType": "业务类型",
+      "receiverId": "接收者编号",
+      "sendTime": "发送时间",
+      "senderId": "发送人编号",
+      "senderName": "发送人名称",
+      "content": "内容",
+      "attachments": "附件(名称,资源编号;)",
+      "channelId": "通道编号",
+      "outTemplateId": "外部模板编号",
+      "status": "状态",
+      "deliveryStatus": "投递状态",
+      "deliveryTime": "投递时间",
+      "remark": "备注"
+    }
+  },
+  "messageNotification": {
+    "title": "消息通知",
+    "field": {
+      "messageHistoryId": "消息记录编号",
+      "title": "标题",
+      "messageType": "消息类型",
+      "messageGroup": "消息分组",
+      "bizType": "业务类型",
+      "receiverId": "接收人编号",
+      "content": "内容",
+      "isRead": "已读",
+      "senderId": "发送人编号",
+      "senderName": "发送人",
+      "senderAvatar": "发送人头像",
+      "sendTime": "发送时间",
+      "remark": "备注"
+    }
+  },
+  "myNotification": {
+    "title": "我的消息",
+    "markRead": "标记已读"
+  }
+}
