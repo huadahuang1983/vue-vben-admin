@@ -52,6 +52,11 @@ async function loadMyUserInfo() {
 
 const [Drawer, drawerApi] = useVbenDrawer({
   connectedComponent: UserInfoDrawer,
+  onOpenChange(isOpen) {
+    if (!isOpen) {
+      loadMyUserInfo();
+    }
+  },
 });
 
 function openUserInfoDrawer() {
