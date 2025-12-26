@@ -6,9 +6,9 @@ import { computed, ref } from 'vue';
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { setPasswordByPhoneApi, sendVerifyCodeToMeApi } from '#/api';
+import { sendVerifyCodeToMeApi, setPasswordByPhoneApi } from '#/api';
 
-defineOptions({ name: 'SetPasswordByPhone' });  
+defineOptions({ name: 'SetPasswordByPhone' });
 
 const loading = ref(false);
 

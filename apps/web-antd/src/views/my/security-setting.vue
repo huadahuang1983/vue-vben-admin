@@ -9,11 +9,11 @@ import { $t } from '@vben/locales';
 import { Button, Col, Divider, Modal, Row } from 'ant-design-vue';
 
 import { deleteUserApi, loadMyUserCredentialApi } from '#/api';
-import SetPasswordByPhone from './set-password-by-phone.vue';
 
 import ModifyPassword from './modify-password.vue';
 import ModifyPhoneNumber from './modify-phone-number.vue';
 import ModifyUsername from './modify-username.vue';
+import SetPasswordByPhone from './set-password-by-phone.vue';
 
 const userCredential = ref<UserCredentialModel>({});
 
