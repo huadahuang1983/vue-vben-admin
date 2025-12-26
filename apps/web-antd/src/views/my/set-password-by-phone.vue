@@ -6,23 +6,32 @@ import { computed, ref } from 'vue';
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { modifyPasswordApi } from '#/api';
+import { setPasswordByPhoneApi, sendVerifyCodeToMeApi } from '#/api';
 
-defineOptions({ name: 'ModifyPassword' });
+defineOptions({ name: 'SetPasswordByPhone' });  
 
 const loading = ref(false);
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
-      component: 'VbenInputPassword',
+      component: 'VbenPinInput',
       componentProps: {
-        placeholder: $t('my.securitySetting.oldPassword'),
-        autocomplete: 'off',
+        createText: (countdown: number) => {
+          const text =
+            countdown > 0
+              ? $t('authentication.sendText', [countdown])
+              : $t('authentication.sendCode');
+          return text;
+        },
+        placeholder: $t('my.securitySetting.oldVerifyCode'),
+        handleSendCode: () => {
+          sendVerifyCodeToMeApi({});
+        },
       },
-      fieldName: 'oldPassword',
-      label: $t('my.securitySetting.oldPassword'),
-      rules: 'required',
+      fieldName: 'verifyCode',
+      label: $t('my.securitySetting.oldVerifyCode'),
+      rules: z.string().min(1, { message: $t('authentication.codeTip') }),
     },
     {
       component: 'VbenInputPassword',
@@ -65,9 +74,9 @@ const formSchema = computed((): VbenFormSchema[] => {
 
 async function handleSubmit(values: any) {
   loading.value = true;
-  await modifyPasswordApi({
-    password: values.oldPassword,
-    newPassword: values.password,
+  await setPasswordByPhoneApi({
+    verifyCode: values.verifyCode,
+    password: values.password,
   });
   loading.value = false;
 }

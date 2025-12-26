@@ -3,6 +3,7 @@
   "deleteUser": "注销",
   "deleteUserHint": "请确认是否进行账户注销操作？该操作将删除用户信息，您将无法再使用本系统。",
   "modifyPassword": "修改密码",
+  "setPasswordByPhone": "通过手机号设置密码",
   "modifyUsername": "修改账户",
   "modifyPhoneNumber": "修改手机号",
   "configRole": "配置权限",

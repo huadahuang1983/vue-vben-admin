@@ -9,6 +9,7 @@ import { $t } from '@vben/locales';
 import { Button, Col, Divider, Modal, Row } from 'ant-design-vue';
 
 import { deleteUserApi, loadMyUserCredentialApi } from '#/api';
+import SetPasswordByPhone from './set-password-by-phone.vue';
 
 import ModifyPassword from './modify-password.vue';
 import ModifyPhoneNumber from './modify-phone-number.vue';
@@ -55,6 +56,14 @@ const [ModifyPhoneNumberModal, modifyPhoneNumberModalApi] = useVbenModal({
 function openModifyPhoneNumberView() {
   modifyPhoneNumberModalApi.open();
 }
+
+const [SetPasswordByPhoneModal, setPasswordByPhoneModalApi] = useVbenModal({
+  connectedComponent: SetPasswordByPhone,
+});
+
+function openSetPasswordByPhoneView() {
+  setPasswordByPhoneModalApi.open();
+}
 </script>
 <template>
   <div class="p-4">
@@ -92,6 +101,9 @@ function openModifyPhoneNumberView() {
         <Button type="link" @click="openModifyPasswordView">
           {{ $t('user.modifyPassword') }}
         </Button>
+        <Button type="link" @click="openSetPasswordByPhoneView">
+          {{ $t('user.setPasswordByPhone') }}
+        </Button>
         <Button danger type="link" @click="deleteUser">
           {{ $t('user.deleteUser') }}
         </Button>
@@ -99,6 +111,7 @@ function openModifyPhoneNumberView() {
     </Row>
   </div>
   <ModifyPasswordModal />
+  <SetPasswordByPhoneModal />
   <ModifyUsernameModal />
   <ModifyPhoneNumberModal />
 </template>

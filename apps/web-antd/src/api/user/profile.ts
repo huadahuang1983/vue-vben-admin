@@ -17,6 +17,10 @@ export async function modifyPasswordApi(param: any) {
   return requestClient.post('/user/my/credential/password', param);
 }
 
+export async function setPasswordByPhoneApi(param: any) {
+  return requestClient.post('/user/my/credential/password-by-phone-number', param);
+}
+
 export async function modifyUsernameApi(param: any) {
   return requestClient.post('/user/my/credential/username', param);
 }
