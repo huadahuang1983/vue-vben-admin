@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 
 import { Avatar, Button, Col, Divider, Input, Row } from 'ant-design-vue';
+import dayjs from 'dayjs';
 
 import { loadMyUserInfoApi, updateMyUserInfoApi } from '#/api';
 import { ImageCropperUpload } from '#/components';
@@ -11,7 +12,6 @@ import { $t } from '#/locales';
 import { useDictionaryStore } from '#/store/dictionary';
 
 import UserInfoDrawer from './user-info-form.vue';
-import dayjs from 'dayjs';
 
 defineOptions({
   name: 'MyUserInfo',
@@ -61,7 +61,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
 });
 
 function openUserInfoDrawer() {
-  const birthday = myUserInfo.value.birthday ? dayjs(myUserInfo.value.birthday) : null;
+  const birthday = myUserInfo.value.birthday
+    ? dayjs(myUserInfo.value.birthday)
+    : null;
   drawerApi.setData({
     // 表单值
     values: {
@@ -186,7 +188,13 @@ async function emailSubmit() {
         <Col :span="4" class="text-right">
           {{ $t('user.userInfo.field.birthday') }}：
         </Col>
-        <Col :span="8">{{ myUserInfo.birthday ? dayjs(myUserInfo.birthday).format('YYYY-MM-DD') : '' }}</Col>
+        <Col :span="8">
+          {{
+            myUserInfo.birthday
+              ? dayjs(myUserInfo.birthday).format('YYYY-MM-DD')
+              : ''
+          }}
+        </Col>
         <Col :span="4" class="text-right">
           {{ $t('user.userInfo.field.userStatus') }}：
         </Col>
