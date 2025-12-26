@@ -43,6 +43,28 @@ const [Form, formApi] = useVbenForm({
       description: '',
     },
     {
+      component: 'DatePicker',
+      componentProps: {
+        class: 'mr-2',
+        valueFormat: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD',
+      },
+      fieldName: 'birthday',
+      label: $t('user.userInfo.field.birthday'),
+      rules: '',
+      description: '',
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        class: 'mr-2',
+      },
+      fieldName: 'country',
+      label: $t('user.userInfo.field.country'),
+      rules: '',
+      description: '',
+    },
+    {
       component: 'Textarea',
       componentProps: {
         class: 'mr-2',

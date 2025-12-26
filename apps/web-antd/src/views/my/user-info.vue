@@ -11,6 +11,7 @@ import { $t } from '#/locales';
 import { useDictionaryStore } from '#/store/dictionary';
 
 import UserInfoDrawer from './user-info-form.vue';
+import dayjs from 'dayjs';
 
 defineOptions({
   name: 'MyUserInfo',
@@ -60,9 +61,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
 });
 
 function openUserInfoDrawer() {
+  const birthday = myUserInfo.value.birthday ? dayjs(myUserInfo.value.birthday) : null;
   drawerApi.setData({
     // 表单值
-    values: myUserInfo.value,
+    values: {
+      ...myUserInfo.value,
+      birthday: birthday?.format('YYYY-MM-DD') || '',
+    },
   });
   drawerApi.open();
 }
@@ -181,7 +186,7 @@ async function emailSubmit() {
         <Col :span="4" class="text-right">
           {{ $t('user.userInfo.field.birthday') }}：
         </Col>
-        <Col :span="8">{{ myUserInfo.birthday }}</Col>
+        <Col :span="8">{{ myUserInfo.birthday ? dayjs(myUserInfo.birthday).format('YYYY-MM-DD') : '' }}</Col>
         <Col :span="4" class="text-right">
           {{ $t('user.userInfo.field.userStatus') }}：
         </Col>
