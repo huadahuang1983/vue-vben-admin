@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Recordable } from '@vben/types';
+
 import type { VbenFormSchema } from '#/adapter/form';
 
 import { computed, ref } from 'vue';
@@ -6,6 +8,8 @@ import { computed, ref } from 'vue';
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
+
+import { changeMyPasswordApi } from '#/api';
 
 const profilePasswordSettingRef = ref();
 
@@ -52,7 +56,8 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-function handleSubmit() {
+async function handleSubmit(value: Recordable<any>) {
+  await changeMyPasswordApi(value);
   message.success('密码修改成功');
 }
 </script>

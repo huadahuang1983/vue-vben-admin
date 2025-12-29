@@ -7,24 +7,15 @@ import { computed, onMounted, ref } from 'vue';
 
 import { ProfileBaseSetting } from '@vben/common-ui';
 
-import { getUserInfoApi } from '#/api';
+import {
+  getUserInfoApi,
+  loadAllEnabledRoleApi,
+  updateMyUserInfoApi,
+} from '#/api';
 
 const profileBaseSettingRef = ref();
 
-const MOCK_ROLES_OPTIONS: BasicOption[] = [
-  {
-    label: '管理员',
-    value: 'super',
-  },
-  {
-    label: '用户',
-    value: 'user',
-  },
-  {
-    label: '测试',
-    value: 'test',
-  },
-];
+const roleOptions = ref<BasicOption[]>();
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -43,23 +34,40 @@ const formSchema = computed((): VbenFormSchema[] => {
       component: 'Select',
       componentProps: {
         mode: 'tags',
-        options: MOCK_ROLES_OPTIONS,
+        options: roleOptions,
       },
       label: '角色',
     },
     {
-      fieldName: 'introduction',
+      fieldName: 'desc',
       component: 'Textarea',
       label: '个人简介',
     },
   ];
 });
 
+async function loadRoleOptions() {
+  const roles = await loadAllEnabledRoleApi();
+  roleOptions.value = roles.map((item: any) => ({
+    label: item.roleName,
+    value: item.roleId,
+  }));
+}
+
 onMounted(async () => {
+  await loadRoleOptions();
   const data = await getUserInfoApi();
   profileBaseSettingRef.value.getFormApi().setValues(data);
 });
+
+async function handleSubmit(values: any) {
+  await updateMyUserInfoApi(values);
+}
 </script>
 <template>
-  <ProfileBaseSetting ref="profileBaseSettingRef" :form-schema="formSchema" />
+  <ProfileBaseSetting
+    ref="profileBaseSettingRef"
+    :form-schema="formSchema"
+    @submit="handleSubmit"
+  />
 </template>

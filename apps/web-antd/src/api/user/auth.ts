@@ -54,8 +54,6 @@ export interface OAuth2CodeLoginResult {
 
 /**
  * 发送验证验证码，支持短信和邮件模式
- * @param data
- * @returns
  */
 export async function sendVerifyCodeApi(data: SendVerifyCodeParams) {
   return requestClient.post<any>('/message/verify-code/send', data);
@@ -74,7 +72,6 @@ export interface ResetPasswordParam {
 
 /**
  * 重置密码
- * @param param
  */
 export async function resetPasswordApi(param: ResetPasswordParam) {
   return requestClient.post('/user/reset-password', param);
@@ -82,7 +79,6 @@ export async function resetPasswordApi(param: ResetPasswordParam) {
 
 /**
  * 注册用户
- * @param param zhu
  */
 export async function registerApi(param: any) {
   return requestClient.post<boolean>('/user/register', param);
@@ -144,18 +140,9 @@ export interface SecurityPredictModel {
   username?: string;
   requireCaptcha?: boolean;
 }
-/**
- * 加载认证相关提示信息
- * @param param j
- */
-export async function loadAuthPredictApi(params: SecurityPredictModel) {
-  return requestClient.post<SecurityPredictModel>('/auth/predict', params);
-}
 
 /**
  * 加载验证码
- * @param params
- * @returns
  */
 export async function loadCaptchaApi(params: any) {
   return requestClient.post('captcha/get', params);
@@ -168,7 +155,6 @@ export interface VerifyCodePredictModel {
 
 /**
  * 加载发送验证码的相关提示信息
- * @param param j
  */
 export async function loadVerifyCodePredictApi(params: VerifyCodePredictModel) {
   return requestClient.post<VerifyCodePredictModel>(
@@ -177,12 +163,15 @@ export async function loadVerifyCodePredictApi(params: VerifyCodePredictModel) {
   );
 }
 
+export async function configUserCredentialByUserIdApi(
+  userId: string,
+  params: any,
+) {
+  return requestClient.post(`/user/credential/config/${userId}`, params);
+}
+
 /**
  * 部分oauth2认证平台通过打开新的窗口进行授权认证
- * @param openUrl
- * @param name
- * @param callback
- * @param mode
  */
 export function openWindow(
   openUrl: string,
