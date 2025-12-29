@@ -27,6 +27,10 @@ import { $t } from '#/locales';
 
 import { getMenuTypeOptions } from '../data';
 
+const emit = defineEmits<{
+  success: [];
+}>();
+
 const componentKeys: string[] = Object.keys(
   import.meta.glob('../../views/**/*.vue'),
 )
@@ -36,9 +40,6 @@ const componentKeys: string[] = Object.keys(
     return path.endsWith('.vue') ? path.slice(0, -4) : path;
   });
 
-const emit = defineEmits<{
-  success: [];
-}>();
 const formData = ref<SystemMenuApi.SystemMenu>();
 const titleSuffix = ref<string>();
 const schema: VbenFormSchema[] = [
