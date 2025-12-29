@@ -663,6 +663,9 @@ importers:
       '@types/vue-cropperjs':
         specifier: ^4.1.6
         version: 4.1.6(typescript@5.9.3)
+      '@vben-core/menu-ui':
+        specifier: workspace:*
+        version: link:../../packages/@core/ui-kit/menu-ui
       '@vben/access':
         specifier: workspace:*
         version: link:../../packages/effects/access
