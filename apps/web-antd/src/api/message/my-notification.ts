@@ -1,9 +1,7 @@
-import type { NotificationItem } from '@vben/layouts';
-
 import { requestClient } from '#/api/request';
 
 export async function loadLatestNotificationApi(param: number) {
-  return requestClient.get<NotificationItem[]>(
+  return requestClient.get(
     `/message/notification/my/latest?pageSize=${param}`,
   );
 }
