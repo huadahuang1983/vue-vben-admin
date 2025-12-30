@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 
 import { ProfileNotificationSetting } from '@vben/common-ui';
+
 import { loadLatestNotificationApi } from '#/api';
-import { onMounted, ref } from 'vue';
 
 const formSchema = ref<any>([]);
 
@@ -14,14 +15,13 @@ async function loadMyNotification() {
       value: !item.isRead,
       label: item.title,
       description: item.message,
-    }
+    };
   });
 }
 
 onMounted(async () => {
   await loadMyNotification();
 });
-
 </script>
 <template>
   <ProfileNotificationSetting :form-schema="formSchema" />

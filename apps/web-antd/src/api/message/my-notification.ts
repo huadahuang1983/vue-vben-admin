@@ -1,9 +1,7 @@
 import { requestClient } from '#/api/request';
 
 export async function loadLatestNotificationApi(param: number) {
-  return requestClient.get(
-    `/message/notification/my/latest?pageSize=${param}`,
-  );
+  return requestClient.get(`/message/notification/my/latest?pageSize=${param}`);
 }
 
 export async function clearNotificationApi() {
