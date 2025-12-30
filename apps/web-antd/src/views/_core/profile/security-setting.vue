@@ -15,7 +15,7 @@ onMounted(async () => {
 const formSchema = computed(() => {
   return [
     {
-      value: true,
+      value: false,
       fieldName: 'accountPassword',
       label: '账户密码',
       description: `当前密码强度：${strengthLabels[credentials.value.passwordStrength]}`,
