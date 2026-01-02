@@ -6,8 +6,12 @@ import { computed, h, ref } from 'vue';
 
 import { AuthenticationRegister, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { registerApi } from '#/api';
+import { useRouter } from 'vue-router';
 
 defineOptions({ name: 'Register' });
+
+const router = useRouter();
 
 const loading = ref(false);
 
@@ -84,6 +88,12 @@ const formSchema = computed((): VbenFormSchema[] => {
 function handleSubmit(value: Recordable<any>) {
   // eslint-disable-next-line no-console
   console.log('register submit:', value);
+  loading.value = true;
+  registerApi(value).then(() => {
+    router.push({ name: 'Login' });
+  }).finally(() => {
+    loading.value = false;
+  });
 }
 </script>
 

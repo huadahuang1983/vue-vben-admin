@@ -20,17 +20,24 @@ export async function deleteUserApi() {
   return requestClient.post('/user/my/delete');
 }
 
-export async function setPasswordByPhoneApi(param: any) {
-  return requestClient.post(
-    '/user/my/credential/password-by-phone-number',
-    param,
-  );
-}
-
-export async function modifyUsernameApi(param: any) {
-  return requestClient.post('/user/my/credential/username', param);
-}
-
-export async function modifyPhoneNumberApi(param: any) {
+export async function bindPhoneNumberApi(param: any) {
   return requestClient.post('/user/my/credential/phone-number', param);
+}
+
+export async function unbindPhoneNumberApi(param: any) {
+  return requestClient.post('/user/my/credential/phone-number/unbind', param);
+}
+
+export async function bindEmailApi(param: any) {
+  return requestClient.post('/user/my/credential/email', param);
+}
+
+export async function unbindEmailApi(param: any) {
+  return requestClient.post('/user/my/credential/email/unbind', param);
+}
+
+export async function changeAccountStatusApi(fieldName: string, status: boolean) {
+  return requestClient.post(
+    `/user/my/credential/status/${fieldName}/${status}`,
+  );
 }

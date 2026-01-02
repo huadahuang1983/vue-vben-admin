@@ -5,7 +5,10 @@
     "codeLogin": "验证码登录",
     "qrcodeLogin": "二维码登录",
     "forgetPassword": "忘记密码",
-    "profile": "个人中心"
+    "forgetResetPassword": "密码重置",
+    "profile": "个人中心",
+    "resetPassword": "重置密码",
+    "resetPasswordDescription": "请输入新密码，如果时间过期，请重新操作忘记密码"
   },
   "dashboard": {
     "title": "概览",

@@ -1,0 +1,30 @@
+{
+  "title": "个人中心",
+  "userInfo": {
+    "title": "个人信息"
+  },
+  "securitySetting": {
+    "title": "安全设置",
+    "oldPassword": "原密码",
+    "oldVerifyCode": "原手机验证码",
+    "accountPassword": "账户密码",
+    "accountPasswordDescription": "当前密码强度：",
+    "noBind": "未绑定",
+    "bind": "绑定",
+    "unbind": "解绑",
+    "securityPhone": "密保手机",
+    "securityPhoneDescription": "已绑定手机：",
+    "bindPhoneNumber": "绑定手机",
+    "securityQuestion": "密保问题",
+    "securityQuestionDescription": "密保问题可有效保护账户安全",
+    "securityEmail": "备用邮箱",
+    "securityEmailDescription": "已绑定邮箱：",
+    "bindEmail": "绑定邮箱",
+    "securityMfaDevice": "MFA设备",
+    "securityMfaDeviceDescription": "未绑定 MFA 设备，绑定后，可以进行二次确认"
+  },
+  "avatar": {
+    "uploadTitle": "用户头像",
+    "changeAvatar": "更换头像"
+  }
+}

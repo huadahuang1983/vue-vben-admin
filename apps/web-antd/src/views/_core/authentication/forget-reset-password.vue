@@ -1,38 +1,22 @@
 <script lang="ts" setup>
 import type { VbenFormSchema } from '@vben/common-ui';
+import type { Recordable } from '@vben/types';
 
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
+import { AuthenticationRegister, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sendVerifyCodeToMeApi, setPasswordByPhoneApi } from '#/api';
+import { forgetResetPasswordApi } from '#/api';
 
-defineOptions({ name: 'SetPasswordByPhone' });
+defineOptions({ name: 'ForgetResetPassword' });
 
 const loading = ref(false);
+const router = useRouter();
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
-    {
-      component: 'VbenPinInput',
-      componentProps: {
-        createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
-          return text;
-        },
-        placeholder: $t('my.securitySetting.oldVerifyCode'),
-        handleSendCode: () => {
-          sendVerifyCodeToMeApi({});
-        },
-      },
-      fieldName: 'verifyCode',
-      label: $t('my.securitySetting.oldVerifyCode'),
-      rules: z.string().min(1, { message: $t('authentication.codeTip') }),
-    },
     {
       component: 'VbenInputPassword',
       componentProps: {
@@ -72,36 +56,34 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-async function handleSubmit(values: any) {
-  loading.value = true;
-  await setPasswordByPhoneApi({
-    verifyCode: values.verifyCode,
-    password: values.password,
-  });
-  loading.value = false;
+async function handleSubmit(value: Recordable<any>) {
+    loading.value = true;
+    const resetPasswordParam = {
+      password: value.password,
+    };
+    const query = window.location.search;
+    forgetResetPasswordApi(query, resetPasswordParam).then(() => {
+      router.push({name: 'Login'});
+    }).finally(() => {
+      loading.value = false;
+    });
 }
-
-const [Form, formApi] = useVbenForm({
-  schema: [...formSchema.value],
-  showDefaultActions: false,
-  handleSubmit,
-});
-
-const [Modal, modalApi] = useVbenModal({
-  title: $t('user.modifyPassword'),
-  onConfirm: async () => {
-    const { valid } = await formApi.validate();
-    if (!valid) {
-      return;
-    }
-    await formApi.submitForm();
-    modalApi.close();
-  },
-});
 </script>
 
 <template>
-  <Modal>
-    <Form />
-  </Modal>
+  <AuthenticationRegister
+    :form-schema="formSchema"
+    :loading="loading"
+    @submit="handleSubmit"
+  >
+    <template #title>
+      {{ $t('page.auth.resetPassword') }}
+    </template>
+    <template #subTitle>
+      {{ $t('page.auth.resetPasswordDescription') }}
+    </template>
+    <template #submitButtonText>
+      {{ $t('page.auth.resetPassword') }}
+    </template>
+  </AuthenticationRegister>
 </template>

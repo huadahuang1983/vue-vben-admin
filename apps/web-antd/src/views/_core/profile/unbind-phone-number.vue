@@ -1,47 +1,28 @@
 <script lang="ts" setup>
 import type { VbenFormSchema } from '@vben/common-ui';
 
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
-  modifyPhoneNumberApi,
-  sendVerifyCodeApi,
+  unbindPhoneNumberApi,
   sendVerifyCodeToMeApi,
 } from '#/api';
 
-defineOptions({ name: 'ModifyPhoneNumber' });
+defineOptions({ name: 'UnbindPhoneNumber' });
 
 const loading = ref(false);
 const formApiRef = ref();
 
-const formSchema = computed((): VbenFormSchema[] => {
-  return [
-    {
-      component: 'VbenPinInput',
-      componentProps: {
-        createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
-          return text;
-        },
-        placeholder: $t('my.securitySetting.oldVerifyCode'),
-        handleSendCode: () => {
-          sendVerifyCodeToMeApi({});
-        },
-      },
-      fieldName: 'verifyCode',
-      label: $t('my.securitySetting.oldVerifyCode'),
-      rules: z.string().min(1, { message: $t('authentication.codeTip') }),
-    },
+const formSchema: VbenFormSchema[] =
+  [
     {
       component: 'VbenInput',
       componentProps: {
         placeholder: $t('user.userCredential.field.phoneNumber'),
+        disabled: true,
       },
       fieldName: 'phoneNumber',
       label: $t('user.userCredential.field.phoneNumber'),
@@ -59,21 +40,22 @@ const formSchema = computed((): VbenFormSchema[] => {
         },
         placeholder: $t('authentication.code'),
         handleSendCode: async () => {
-          const values = await formApiRef.value.getValues();
-          sendVerifyCodeApi({ receiver: values.phoneNumber });
+          sendVerifyCodeToMeApi();
         },
       },
-      fieldName: 'newVerifyCode',
+      fieldName: 'verifyCode',
       label: $t('authentication.code'),
       rules: z.string().min(1, { message: $t('authentication.codeTip') }),
     },
   ];
-});
 
-async function handleSubmit(values) {
+async function handleSubmit(values: Record<string, any>) {
   loading.value = true;
-  await modifyPhoneNumberApi(values);
-  loading.value = false;
+  unbindPhoneNumberApi(values).then(() => {
+
+  }).finally(() => {
+    loading.value = false;
+  });
 }
 
 const [Form, formApi] = useVbenForm({
@@ -85,7 +67,16 @@ const [Form, formApi] = useVbenForm({
 formApiRef.value = formApi;
 
 const [Modal, modalApi] = useVbenModal({
-  title: $t('user.modifyPhoneNumber'),
+  onOpenChange(isOpen: boolean) {
+    if (isOpen) {
+      const { values, disabled } = modalApi.getData<Record<string, any>>();
+      if (values) {
+        formApi.setValues(values);
+      }
+      const enableEdit = !!disabled;
+      formApi.setState({ commonConfig: { disabled: enableEdit } });
+    }
+  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -94,6 +85,7 @@ const [Modal, modalApi] = useVbenModal({
     await formApi.submitForm();
     modalApi.close();
   },
+  title: $t('profile.securitySetting.unbind'),
 });
 </script>
 

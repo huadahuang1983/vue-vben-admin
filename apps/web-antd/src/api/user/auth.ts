@@ -56,25 +56,24 @@ export interface OAuth2CodeLoginResult {
  * 发送验证验证码，支持短信和邮件模式
  */
 export async function sendVerifyCodeApi(data: SendVerifyCodeParams) {
-  return requestClient.post<any>('/message/verify-code/send', data);
+  return requestClient.post<any>('/auth/send-verification-code', data);
 }
 
-export async function sendVerifyCodeToMeApi(data: SendVerifyCodeParams) {
-  return requestClient.post<any>('/user/verify-code/send-me', data);
+export async function sendVerifyCodeToMeApi(type?: 'email' | 'sms') {
+  return requestClient.post<any>(
+    `/user/my/verify-code/send?type=${type || 'sms'}`,
+  );
 }
 
-export interface ResetPasswordParam {
-  username: string;
-  verifyCode: string;
-  password: string;
-  confirmPassword: string;
+export async function forgetPasswordSendApi(data: SendVerifyCodeParams) {
+  return requestClient.post<any>('/user/forget-password/send', data);
 }
 
 /**
  * 重置密码
  */
-export async function resetPasswordApi(param: ResetPasswordParam) {
-  return requestClient.post('/user/reset-password', param);
+export async function forgetResetPasswordApi(query: string, param: any) {
+  return requestClient.post(`/user/forget-reset-password${query}`, param);
 }
 
 /**
