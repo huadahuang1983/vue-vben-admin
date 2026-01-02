@@ -3,11 +3,12 @@ import type { VbenFormSchema } from '@vben/common-ui';
 import type { Recordable } from '@vben/types';
 
 import { computed, h, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { AuthenticationRegister, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+
 import { registerApi } from '#/api';
-import { useRouter } from 'vue-router';
 
 defineOptions({ name: 'Register' });
 
@@ -89,11 +90,13 @@ function handleSubmit(value: Recordable<any>) {
   // eslint-disable-next-line no-console
   console.log('register submit:', value);
   loading.value = true;
-  registerApi(value).then(() => {
-    router.push({ name: 'Login' });
-  }).finally(() => {
-    loading.value = false;
-  });
+  registerApi(value)
+    .then(() => {
+      router.push({ name: 'Login' });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
 </script>
 

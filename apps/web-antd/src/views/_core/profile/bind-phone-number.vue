@@ -6,48 +6,44 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  bindPhoneNumberApi,
-  sendVerifyCodeApi,
-} from '#/api';
+import { bindPhoneNumberApi, sendVerifyCodeApi } from '#/api';
 
 defineOptions({ name: 'BindPhoneNumber' });
 
 const loading = ref(false);
 const formApiRef = ref();
 
-const formSchema: VbenFormSchema[] =
-  [
-    {
-      component: 'VbenInput',
-      componentProps: {
-        placeholder: $t('user.userCredential.field.phoneNumber'),
-      },
-      fieldName: 'phoneNumber',
-      label: $t('user.userCredential.field.phoneNumber'),
-      rules: 'required',
+const formSchema: VbenFormSchema[] = [
+  {
+    component: 'VbenInput',
+    componentProps: {
+      placeholder: $t('user.userCredential.field.phoneNumber'),
     },
-    {
-      component: 'VbenPinInput',
-      componentProps: {
-        createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
-          return text;
-        },
-        placeholder: $t('authentication.code'),
-        handleSendCode: async () => {
-          const values = await formApiRef.value.getValues();
-          sendVerifyCodeApi({ username: values.phoneNumber });
-        },
+    fieldName: 'phoneNumber',
+    label: $t('user.userCredential.field.phoneNumber'),
+    rules: 'required',
+  },
+  {
+    component: 'VbenPinInput',
+    componentProps: {
+      createText: (countdown: number) => {
+        const text =
+          countdown > 0
+            ? $t('authentication.sendText', [countdown])
+            : $t('authentication.sendCode');
+        return text;
       },
-      fieldName: 'verifyCode',
-      label: $t('authentication.code'),
-      rules: z.string().min(1, { message: $t('authentication.codeTip') }),
+      placeholder: $t('authentication.code'),
+      handleSendCode: async () => {
+        const values = await formApiRef.value.getValues();
+        sendVerifyCodeApi({ username: values.phoneNumber });
+      },
     },
-  ];
+    fieldName: 'verifyCode',
+    label: $t('authentication.code'),
+    rules: z.string().min(1, { message: $t('authentication.codeTip') }),
+  },
+];
 
 async function handleSubmit(values: Record<string, any>) {
   loading.value = true;

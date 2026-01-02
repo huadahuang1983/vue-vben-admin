@@ -36,7 +36,10 @@ export async function unbindEmailApi(param: any) {
   return requestClient.post('/user/my/credential/email/unbind', param);
 }
 
-export async function changeAccountStatusApi(fieldName: string, status: boolean) {
+export async function changeAccountStatusApi(
+  fieldName: string,
+  status: boolean,
+) {
   return requestClient.post(
     `/user/my/credential/status/${fieldName}/${status}`,
   );

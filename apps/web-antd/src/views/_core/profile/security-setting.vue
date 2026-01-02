@@ -1,16 +1,17 @@
 <script setup lang="ts">
-  import { useVbenModal } from '@vben/common-ui';
 import { onMounted, ref } from 'vue';
 
-import { Form, Switch, Button } from 'ant-design-vue';
+import { useVbenModal } from '@vben/common-ui';
+
+import { Button, Form, Switch } from 'ant-design-vue';
 
 import { changeAccountStatusApi, loadMyUserCredentialsApi } from '#/api';
-
-import BindPhoneNumber from './bind-phone-number.vue';
-import UnbindPhoneNumber from './unbind-phone-number.vue';
-import BindEmail from './bind-email.vue';
-import UnbindEmail from './unbind-email.vue';
 import { $t } from '#/locales';
+
+import BindEmail from './bind-email.vue';
+import BindPhoneNumber from './bind-phone-number.vue';
+import UnbindEmail from './unbind-email.vue';
+import UnbindPhoneNumber from './unbind-phone-number.vue';
 
 const strengthLabels = ['弱', '中', '强', '非常强', '异常强'];
 const passwordStrength = ref();
@@ -90,7 +91,6 @@ function openUnbindPhoneNumberView() {
   unbindPhoneNumberModalApi.open();
 }
 
-
 const [BindEmailModal, bindEmailModalApi] = useVbenModal({
   connectedComponent: BindEmail,
   onClosed() {
@@ -156,48 +156,79 @@ function openUnbindEmailView() {
 <template>
   <Form class="space-y-8">
     <div class="space-y-4">
-      <div class="flex flex-row items-center justify-between rounded-lg border p-4">
+      <div
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
         <div class="space-y-0.5">
-          <div class="text-lg font-bold"> {{ $t('profile.securitySetting.accountPassword') }} </div>
+          <div class="text-lg font-bold">
+            {{ $t('profile.securitySetting.accountPassword') }}
+          </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.accountPasswordDescription') }}<span class="text-red-500 font-bold">{{ passwordStrength }}</span>
+            {{ $t('profile.securitySetting.accountPasswordDescription')
+            }}<span class="font-bold text-red-500">{{ passwordStrength }}</span>
           </div>
         </div>
         <div class="flex justify-end">
-          <Switch v-model:checked="accountPasswordChecked" @change="handleAccountPasswordChange" />
+          <Switch
+            v-model:checked="accountPasswordChecked"
+            @change="handleAccountPasswordChange"
+          />
         </div>
       </div>
     </div>
     <div class="space-y-4">
-      <div class="flex flex-row items-center justify-between rounded-lg border p-4">
+      <div
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
         <div class="space-y-0.5">
-          <div class="text-lg font-bold"> {{ $t('profile.securitySetting.securityPhone') }} </div>
+          <div class="text-lg font-bold">
+            {{ $t('profile.securitySetting.securityPhone') }}
+          </div>
           <div class="text-base text-gray-500">
             {{ $t('profile.securitySetting.securityPhoneDescription') }}
-            <span class="text-red-500 font-bold">{{ phoneNumber ? phoneNumber : $t('profile.securitySetting.noBind') }}</span>
-            <span class="pl-2 text-green-500 font-bold">
-              <Button v-if="!phoneNumber" type="link" @click="openBindPhoneNumberView">
+            <span class="font-bold text-red-500">{{
+              phoneNumber ? phoneNumber : $t('profile.securitySetting.noBind')
+            }}</span>
+            <span class="pl-2 font-bold text-green-500">
+              <Button
+                v-if="!phoneNumber"
+                type="link"
+                @click="openBindPhoneNumberView"
+              >
                 {{ $t('profile.securitySetting.bind') }}
               </Button>
-              <Button v-if="phoneNumber" type="link" @click="openUnbindPhoneNumberView">
+              <Button
+                v-if="phoneNumber"
+                type="link"
+                @click="openUnbindPhoneNumberView"
+              >
                 {{ $t('profile.securitySetting.unbind') }}
               </Button>
             </span>
           </div>
         </div>
         <div class="flex justify-end">
-          <Switch v-model:checked="securityPhoneChecked"  @change="handleSecurityPhoneChange" />
+          <Switch
+            v-model:checked="securityPhoneChecked"
+            @change="handleSecurityPhoneChange"
+          />
         </div>
       </div>
     </div>
     <div class="space-y-4">
-      <div class="flex flex-row items-center justify-between rounded-lg border p-4">
+      <div
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
         <div class="space-y-0.5">
-          <div class="text-lg font-bold"> {{ $t('profile.securitySetting.securityEmail') }} </div>
+          <div class="text-lg font-bold">
+            {{ $t('profile.securitySetting.securityEmail') }}
+          </div>
           <div class="text-base text-gray-500">
             {{ $t('profile.securitySetting.securityEmailDescription') }}
-            <span class="text-red-500 font-bold">{{ email ? email : $t('profile.securitySetting.noBind') }}</span>
-            <span class="pl-2 text-green-500 font-bold">
+            <span class="font-bold text-red-500">{{
+              email ? email : $t('profile.securitySetting.noBind')
+            }}</span>
+            <span class="pl-2 font-bold text-green-500">
               <Button v-if="!email" type="link" @click="openBindEmailView">
                 {{ $t('profile.securitySetting.bind') }}
               </Button>
@@ -208,20 +239,31 @@ function openUnbindEmailView() {
           </div>
         </div>
         <div class="flex justify-end">
-          <Switch v-model:checked="securityEmailChecked"  @change="handleSecurityEmailChange" />
+          <Switch
+            v-model:checked="securityEmailChecked"
+            @change="handleSecurityEmailChange"
+          />
         </div>
       </div>
     </div>
     <div class="space-y-4">
-      <div class="flex flex-row items-center justify-between rounded-lg border p-4">
+      <div
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
         <div class="space-y-0.5">
-          <div class="text-lg font-bold"> {{ $t('profile.securitySetting.securityMfaDevice') }} </div>
+          <div class="text-lg font-bold">
+            {{ $t('profile.securitySetting.securityMfaDevice') }}
+          </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.securityMfaDeviceDescription') }}<span class="text-red-500 font-bold">{{ mfaDevice }}</span>
+            {{ $t('profile.securitySetting.securityMfaDeviceDescription')
+            }}<span class="font-bold text-red-500">{{ mfaDevice }}</span>
           </div>
         </div>
         <div class="flex justify-end">
-          <Switch v-model:checked="securityMfaDeviceChecked"  @change="handleSecurityMfaDeviceChange" />
+          <Switch
+            v-model:checked="securityMfaDeviceChecked"
+            @change="handleSecurityMfaDeviceChange"
+          />
         </div>
       </div>
     </div>

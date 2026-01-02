@@ -57,14 +57,16 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 async function handleSubmit(value: Recordable<any>) {
-    loading.value = true;
-    const resetPasswordParam = {
-      password: value.password,
-    };
-    const query = window.location.search;
-    forgetResetPasswordApi(query, resetPasswordParam).then(() => {
-      router.push({name: 'Login'});
-    }).finally(() => {
+  loading.value = true;
+  const resetPasswordParam = {
+    password: value.password,
+  };
+  const query = window.location.search;
+  forgetResetPasswordApi(query, resetPasswordParam)
+    .then(() => {
+      router.push({ name: 'Login' });
+    })
+    .finally(() => {
       loading.value = false;
     });
 }

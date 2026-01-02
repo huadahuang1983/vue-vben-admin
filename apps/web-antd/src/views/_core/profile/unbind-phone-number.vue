@@ -6,56 +6,52 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  unbindPhoneNumberApi,
-  sendVerifyCodeToMeApi,
-} from '#/api';
+import { sendVerifyCodeToMeApi, unbindPhoneNumberApi } from '#/api';
 
 defineOptions({ name: 'UnbindPhoneNumber' });
 
 const loading = ref(false);
 const formApiRef = ref();
 
-const formSchema: VbenFormSchema[] =
-  [
-    {
-      component: 'VbenInput',
-      componentProps: {
-        placeholder: $t('user.userCredential.field.phoneNumber'),
-        disabled: true,
-      },
-      fieldName: 'phoneNumber',
-      label: $t('user.userCredential.field.phoneNumber'),
-      rules: 'required',
+const formSchema: VbenFormSchema[] = [
+  {
+    component: 'VbenInput',
+    componentProps: {
+      placeholder: $t('user.userCredential.field.phoneNumber'),
+      disabled: true,
     },
-    {
-      component: 'VbenPinInput',
-      componentProps: {
-        createText: (countdown: number) => {
-          const text =
-            countdown > 0
-              ? $t('authentication.sendText', [countdown])
-              : $t('authentication.sendCode');
-          return text;
-        },
-        placeholder: $t('authentication.code'),
-        handleSendCode: async () => {
-          sendVerifyCodeToMeApi();
-        },
+    fieldName: 'phoneNumber',
+    label: $t('user.userCredential.field.phoneNumber'),
+    rules: 'required',
+  },
+  {
+    component: 'VbenPinInput',
+    componentProps: {
+      createText: (countdown: number) => {
+        const text =
+          countdown > 0
+            ? $t('authentication.sendText', [countdown])
+            : $t('authentication.sendCode');
+        return text;
       },
-      fieldName: 'verifyCode',
-      label: $t('authentication.code'),
-      rules: z.string().min(1, { message: $t('authentication.codeTip') }),
+      placeholder: $t('authentication.code'),
+      handleSendCode: async () => {
+        sendVerifyCodeToMeApi();
+      },
     },
-  ];
+    fieldName: 'verifyCode',
+    label: $t('authentication.code'),
+    rules: z.string().min(1, { message: $t('authentication.codeTip') }),
+  },
+];
 
 async function handleSubmit(values: Record<string, any>) {
   loading.value = true;
-  unbindPhoneNumberApi(values).then(() => {
-
-  }).finally(() => {
-    loading.value = false;
-  });
+  unbindPhoneNumberApi(values)
+    .then(() => {})
+    .finally(() => {
+      loading.value = false;
+    });
 }
 
 const [Form, formApi] = useVbenForm({
