@@ -3,66 +3,38 @@ import { onMounted, ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { Button, Form, Switch } from 'ant-design-vue';
+import { Button, Form } from 'ant-design-vue';
 
-import { changeAccountStatusApi, loadMyUserCredentialsApi } from '#/api';
+import { loadMyUserCredentialsApi } from '#/api';
 import { $t } from '#/locales';
 
 import BindEmail from './bind-email.vue';
+import BindPasswordQuestion from './bind-password-question.vue';
 import BindPhoneNumber from './bind-phone-number.vue';
 import UnbindEmail from './unbind-email.vue';
 import UnbindPhoneNumber from './unbind-phone-number.vue';
 
 const strengthLabels = ['弱', '中', '强', '非常强', '异常强'];
 const passwordStrength = ref();
+const username = ref();
 const phoneNumber = ref();
 const email = ref();
+const securityQuestion = ref();
 const mfaDevice = ref();
-
-const accountPasswordChecked = ref(true);
-const securityPhoneChecked = ref(true);
-const securityEmailChecked = ref(true);
-const securityMfaDeviceChecked = ref(true);
 
 async function loadCredentials() {
   const credentials = await loadMyUserCredentialsApi();
+  username.value = credentials.username;
   phoneNumber.value = credentials.phoneNumber;
-  securityPhoneChecked.value = credentials.phoneNumberStatus;
   passwordStrength.value = strengthLabels[credentials.passwordStrength];
-  accountPasswordChecked.value = credentials.usernameStatus;
   email.value = credentials.email;
-  securityEmailChecked.value = credentials.emailStatus;
+  securityQuestion.value = credentials.passwordQuestion;
   mfaDevice.value = credentials.mfaDevice;
-  securityMfaDeviceChecked.value = credentials.mfaDeviceStatus;
 }
 
 onMounted(async () => {
   await loadCredentials();
 });
-
-function handleAccountPasswordChange(value: any) {
-  changeAccountStatusApi('username', value).then(() => {
-    accountPasswordChecked.value = value;
-  });
-}
-
-function handleSecurityPhoneChange(value: any) {
-  changeAccountStatusApi('phoneNumber', value).then(() => {
-    securityPhoneChecked.value = value;
-  });
-}
-
-function handleSecurityEmailChange(value: any) {
-  changeAccountStatusApi('email', value).then(() => {
-    securityEmailChecked.value = value;
-  });
-}
-
-function handleSecurityMfaDeviceChange(value: any) {
-  changeAccountStatusApi('mfaDevice', value).then(() => {
-    securityMfaDeviceChecked.value = value;
-  });
-}
 
 const [BindPhoneNumberModal, bindPhoneNumberModalApi] = useVbenModal({
   connectedComponent: BindPhoneNumber,
@@ -118,6 +90,16 @@ function openUnbindEmailView() {
   unbindEmailModalApi.open();
 }
 
+const [BindPasswordQuestionModal, bindPasswordQuestionModalApi] = useVbenModal({
+  connectedComponent: BindPasswordQuestion,
+  onClosed() {
+    loadCredentials();
+  },
+});
+
+function openBindPasswordQuestionView() {
+  bindPasswordQuestionModalApi.open();
+}
 // const formSchema = computed(() => {
 //   return [
 //     {
@@ -164,16 +146,15 @@ function openUnbindEmailView() {
             {{ $t('profile.securitySetting.accountPassword') }}
           </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.accountPasswordDescription')
-            }}<span class="font-bold text-red-500">{{ passwordStrength }}</span>
+            {{ $t('profile.securitySetting.usernameLabel') }}
+            <span class="font-bold text-red-500">{{ username }}</span>
+            <span class="ml-8">{{
+              $t('profile.securitySetting.accountPasswordStrengthLabel')
+            }}</span>
+            <span class="font-bold text-red-500">{{ passwordStrength }}</span>
           </div>
         </div>
-        <div class="flex justify-end">
-          <Switch
-            v-model:checked="accountPasswordChecked"
-            @change="handleAccountPasswordChange"
-          />
-        </div>
+        <div class="flex justify-end"></div>
       </div>
     </div>
     <div class="space-y-4">
@@ -185,7 +166,7 @@ function openUnbindEmailView() {
             {{ $t('profile.securitySetting.securityPhone') }}
           </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.securityPhoneDescription') }}
+            {{ $t('profile.securitySetting.securityPhoneLabel') }}
             <span class="font-bold text-red-500">{{
               phoneNumber ? phoneNumber : $t('profile.securitySetting.noBind')
             }}</span>
@@ -207,12 +188,7 @@ function openUnbindEmailView() {
             </span>
           </div>
         </div>
-        <div class="flex justify-end">
-          <Switch
-            v-model:checked="securityPhoneChecked"
-            @change="handleSecurityPhoneChange"
-          />
-        </div>
+        <div class="flex justify-end"></div>
       </div>
     </div>
     <div class="space-y-4">
@@ -224,7 +200,7 @@ function openUnbindEmailView() {
             {{ $t('profile.securitySetting.securityEmail') }}
           </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.securityEmailDescription') }}
+            {{ $t('profile.securitySetting.securityEmailLabel') }}
             <span class="font-bold text-red-500">{{
               email ? email : $t('profile.securitySetting.noBind')
             }}</span>
@@ -238,12 +214,32 @@ function openUnbindEmailView() {
             </span>
           </div>
         </div>
-        <div class="flex justify-end">
-          <Switch
-            v-model:checked="securityEmailChecked"
-            @change="handleSecurityEmailChange"
-          />
+        <div class="flex justify-end"></div>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <div
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
+        <div class="space-y-0.5">
+          <div class="text-lg font-bold">
+            {{ $t('profile.securitySetting.securityQuestion') }}
+          </div>
+          <div class="text-base text-gray-500">
+            {{
+              securityQuestion
+                ? $t('profile.securitySetting.securityQuestionLabel')
+                : $t('profile.securitySetting.securityQuestionDescription')
+            }}
+            <span class="font-bold text-red-500">{{ securityQuestion }}</span>
+            <span class="pl-2 font-bold text-green-500">
+              <Button type="link" @click="openBindPasswordQuestionView">
+                {{ $t('profile.securitySetting.bind') }}
+              </Button>
+            </span>
+          </div>
         </div>
+        <div class="flex justify-end"></div>
       </div>
     </div>
     <div class="space-y-4">
@@ -255,16 +251,15 @@ function openUnbindEmailView() {
             {{ $t('profile.securitySetting.securityMfaDevice') }}
           </div>
           <div class="text-base text-gray-500">
-            {{ $t('profile.securitySetting.securityMfaDeviceDescription')
-            }}<span class="font-bold text-red-500">{{ mfaDevice }}</span>
+            {{
+              mfaDevice
+                ? $t('profile.securitySetting.securityMfaDeviceLabel')
+                : $t('profile.securitySetting.securityMfaDeviceDescription')
+            }}
+            <span class="font-bold text-red-500">{{ mfaDevice }}</span>
           </div>
         </div>
-        <div class="flex justify-end">
-          <Switch
-            v-model:checked="securityMfaDeviceChecked"
-            @change="handleSecurityMfaDeviceChange"
-          />
-        </div>
+        <div class="flex justify-end"></div>
       </div>
     </div>
   </Form>
@@ -272,4 +267,5 @@ function openUnbindEmailView() {
   <UnbindPhoneNumberModal />
   <BindEmailModal />
   <UnbindEmailModal />
+  <BindPasswordQuestionModal />
 </template>

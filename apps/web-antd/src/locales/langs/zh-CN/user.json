@@ -44,6 +44,8 @@
       "phoneNumber": "手机号",
       "email": "电子邮箱",
       "password": "密码",
+      "passwordQuestion": "密码问题",
+      "passwordAnswer": "密码答案",
       "accountEnabled": "启用",
       "accountNonExpired": "未过期",
       "accountNonLocked": "未被锁定",
