@@ -1,204 +1,118 @@
 <script lang="ts" setup>
-import type { VbenFormProps } from '@vben/common-ui';
+import type {
+  OnActionClickParams,
+  VxeGridListeners,
+  VxeTableGridOptions,
+} from '#/adapter/vxe-table';
 
-import type { VxeGridProps } from '#/adapter/vxe-table';
-
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
-import { DownOutlined } from '@ant-design/icons-vue';
-import {
-  Button,
-  Dropdown,
-  Menu,
-  MenuItem,
-  message,
-  Modal,
-} from 'ant-design-vue';
-
-import { createGridOptions } from '#/adapter/default-options';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { loadConfigParamPageApi, removeConfigParamApi } from '#/api';
-import { useDictionaryStore } from '#/store/dictionary';
 
-import FormPage from './form.vue';
+import { useColumns, useGridFormSchema } from './data';
+import FormPage from './modules/form.vue';
 
-const dictionaryStore = useDictionaryStore();
-const allDictMap = ref(new Map<string, Map<string, string>>());
-
-onMounted(async () => {
-  allDictMap.value = await dictionaryStore.getAllDictMap();
+const [FormDrawer, formDrawerApi] = useVbenDrawer({
+  connectedComponent: FormPage,
+  destroyOnClose: true,
+  onClosed: onRefresh,
 });
 
-const formOptions: VbenFormProps = {
-  collapsed: true,
-  schema: [
-    {
-      component: 'Input',
-      fieldName: 'paramCode',
-      label: $t('infra.configParam.field.paramCode'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'paramName',
-      label: $t('infra.configParam.field.paramName'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'paramType',
-      label: $t('infra.configParam.field.paramType'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'paramValue',
-      label: $t('infra.configParam.field.paramValue'),
-    },
-  ],
-};
-const gridOptions: VxeGridProps<any> = {
-  ...createGridOptions(loadConfigParamPageApi),
-
-  columns: [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
-    { field: 'paramCode', title: $t('infra.configParam.field.paramCode') },
-    { field: 'paramName', title: $t('infra.configParam.field.paramName') },
-    {
-      field: 'paramType',
-      title: $t('infra.configParam.field.paramType'),
-      slots: { default: 'paramType' },
-    },
-    { field: 'paramValue', title: $t('infra.configParam.field.paramValue') },
-    {
-      field: 'status',
-      title: $t('infra.configParam.field.status'),
-      slots: { default: 'status' },
-    },
-    { field: 'remark', title: $t('infra.configParam.field.remark') },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: $t('common.action'),
-      width: 200,
-    },
-  ],
-};
-const [Grid, gridApi] = useVbenVxeGrid({ formOptions, gridOptions });
-
-const [FormViewer, formViewerApi] = useVbenDrawer({
-  connectedComponent: FormPage,
-  onOpenChange(isOpen: boolean) {
-    if (!isOpen) {
-      const { success } = formViewerApi.getData();
-      if (success) {
-        gridApi.query();
-      }
+const gridEvents: VxeGridListeners = {
+  toolbarButtonClick(params) {
+    if (params.code === 'create') {
+      onCreate();
     }
   },
-});
-
-const formDefaultValues = {
-  paramType: 'private',
-  status: 'enabled',
 };
 
-function add() {
-  const rowData = formDefaultValues;
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
+    schema: useGridFormSchema(),
+    submitOnChange: true,
+  },
+  gridOptions: {
+    columns: useColumns(onActionClick),
+    height: 'auto',
+    keepSource: true,
+    proxyConfig: {
+      ajax: {
+        query: async ({ page }, formValues) => {
+          return await loadConfigParamPageApi({
+            page: page.currentPage,
+            pageSize: page.pageSize,
+            ...formValues,
+          });
+        },
+        delete: ({ body }) => {
+          return onDelete(body.removeRecords);
+        },
+      },
+    },
+    rowConfig: {
+      keyField: 'configParamId',
+    },
+  } as VxeTableGridOptions,
+  gridEvents,
+});
+
+function onCreate() {
+  formDrawerApi
+    .setData({ values: { paramType: 'public', status: 'enabled' } })
+    .open();
 }
 
-function details(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
+const onDelete = (removeRecords: any[]) => {
+  const recordIds = removeRecords.map((item) => item.configParamId);
+  removeConfigParamApi(recordIds).then(() => {
+    gridApi.query();
+  });
+};
+
+function onEdit(row: any) {
+  formDrawerApi.setData({ values: row }).open();
+}
+
+function onView(row: any) {
+  formDrawerApi.setData({
+    values: row,
     disabled: true,
   });
-  formViewerApi.open();
+  formDrawerApi.open();
 }
 
-function edit(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
+function onRefresh() {
+  gridApi.query();
 }
 
-async function removeByIds(ids: Array<any>) {
-  if (!ids || ids.length === 0) {
-    message.warn($t('common.noDataSelected'));
-    return;
+function onActionClick(e: OnActionClickParams) {
+  switch (e.code) {
+    case 'delete': {
+      onDelete([e.row]);
+      break;
+    }
+    case 'edit': {
+      onEdit(e.row);
+      break;
+    }
+    case 'view': {
+      onView(e.row);
+      break;
+    }
   }
-  Modal.confirm({
-    onOk: async () => {
-      await removeConfigParamApi(ids);
-      gridApi.query();
-    },
-    title: $t('common.deleteConfirm'),
-  });
 }
 
-async function batchRemove() {
-  const selectedRows = gridApi.grid.getCheckboxRecords();
-  const ids: Array<any> = [];
-  selectedRows.forEach((row) => {
-    ids.push(row.configParamId);
-  });
-  await removeByIds(ids);
-}
+onMounted(() => {
+  onRefresh();
+});
 </script>
 <template>
   <Page auto-content-height>
-    <Grid>
-      <template #toolbar_buttons>
-        <Button class="mr-2" type="primary" @click="add()">
-          {{ $t('common.new') }}
-        </Button>
-        <Button class="mr-2" danger type="default" @click="batchRemove">
-          {{ $t('common.remove') }}
-        </Button>
-      </template>
-      <template #action="{ row }">
-        <Button class="mr-2 p-0" type="link" @click="details(row)">
-          {{ $t('common.details') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="edit(row)">
-          {{ $t('common.edit') }}
-        </Button>
-        <Dropdown trigger="click">
-          <Button class="p-0" type="link">
-            {{ $t('common.more') }}<DownOutlined />
-          </Button>
-          <template #overlay>
-            <Menu>
-              <MenuItem>
-                <Button
-                  class="mr-2 p-0"
-                  danger
-                  type="link"
-                  @click="removeByIds([row.configParamId])"
-                >
-                  {{ $t('common.remove') }}
-                </Button>
-              </MenuItem>
-            </Menu>
-          </template>
-        </Dropdown>
-      </template>
-      <template #paramType="{ row }">
-        {{ allDictMap.get('ConfigParamType')?.get(row.paramType) }}
-      </template>
-      <template #status="{ row }">
-        {{ allDictMap.get('GenericStatus')?.get(row.status) }}
-      </template>
-    </Grid>
-    <FormViewer />
+    <Grid />
+    <FormDrawer />
   </Page>
 </template>

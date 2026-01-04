@@ -1,62 +1,34 @@
-import type {
-  OptionItemBasicModel,
-  OptionItemTreeModel,
-} from '#/components/type';
+import type { DataDictItemModel } from '#/api';
 
 import { defineStore } from 'pinia';
 
-import { loadAllDictionaryItemApi } from '#/api';
-
 interface DictionaryState {
-  map: Map<string, Map<string, string>>;
-  rawData: OptionItemTreeModel[];
-  loaded: boolean;
+  map: Map<string, DataDictItemModel[]>;
+  loaded: Map<string, boolean>;
 }
 
 export const useDictionaryStore = defineStore('dictionary', {
   state: (): DictionaryState => ({
-    map: new Map<string, Map<string, string>>(),
-    rawData: [],
-    loaded: false,
+    map: new Map<string, DataDictItemModel[]>(),
+    loaded: new Map<string, boolean>(),
   }),
   getters: {},
   actions: {
-    async loadData() {
-      if (this.loaded) {
-        return;
-      }
-      const loadData = await loadAllDictionaryItemApi();
-      this.rawData = loadData;
-      this.loaded = true;
-
-      this.rawData.forEach((element) => {
-        const childMap = new Map<string, string>();
-        element.children.forEach((it) => {
-          childMap.set(it.value, it.label);
-        });
-        this.map.set(element.value, childMap);
-      });
+    isLoaded(dictType: string): boolean {
+      return this.loaded.get(dictType) || false;
     },
-    async getDictMap(dictType: string): Promise<Map<string, string>> {
-      await this.loadData();
-      return this.map.get(dictType) || new Map<string, string>();
+    setLoaded(dictType: string, loaded: boolean) {
+      this.loaded.set(dictType, loaded);
     },
-    async getDictItemLabel(dictType: string, dictValue: string) {
-      const dict = await this.getDictMap(dictType);
-      return dict.get(dictValue);
+    getDataDictItems(dictType: string): DataDictItemModel[] {
+      return this.map.get(dictType) || [];
     },
-    async getAllDictMap() {
-      await this.loadData();
-      return this.map;
+    getDictItemLabel(dictType: string, dataCode: string) {
+      const dataDictItems = this.getDataDictItems(dictType);
+      return dataDictItems.find((it) => it.dataCode === dataCode)?.dataName;
     },
-    async getDictList(dictType: string): Promise<OptionItemBasicModel[]> {
-      let result = new Array<OptionItemBasicModel>();
-      this.rawData.forEach((element) => {
-        if (element.value === dictType) {
-          result = element.children;
-        }
-      });
-      return result;
+    setDataDictItems(dictType: string, dataDictItems: DataDictItemModel[]) {
+      this.map.set(dictType, dataDictItems);
     },
   },
 });

@@ -17,12 +17,12 @@ export function useFormSchema(): VbenFormSchema[] {
       componentProps: {
         buttonStyle: 'solid',
         options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
+          { label: $t('common.enabled'), value: 'enabled' },
+          { label: $t('common.disabled'), value: 'disabled' },
         ],
         optionType: 'button',
       },
-      defaultValue: 1,
+      defaultValue: 'enabled',
       fieldName: 'status',
       label: $t('system.role.status'),
     },
@@ -54,8 +54,8 @@ export function useGridFormSchema(): VbenFormSchema[] {
       componentProps: {
         allowClear: true,
         options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
+          { label: $t('common.enabled'), value: 'enabled' },
+          { label: $t('common.disabled'), value: 'disabled' },
         ],
       },
       fieldName: 'status',
@@ -91,7 +91,11 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
     },
     {
       cellRender: {
-        attrs: { beforeChange: onStatusChange },
+        attrs: {
+          beforeChange: onStatusChange,
+          checkedValue: 'enabled',
+          unCheckedValue: 'disabled',
+        },
         name: onStatusChange ? 'CellSwitch' : 'CellTag',
       },
       field: 'status',

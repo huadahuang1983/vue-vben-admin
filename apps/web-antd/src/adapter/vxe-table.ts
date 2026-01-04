@@ -18,8 +18,8 @@ import { Button, Image, Popconfirm, Switch, Tag } from 'ant-design-vue';
 
 import { $t } from '#/locales';
 
+import { DataSizeUtil, getDataDictLabel } from './data-util';
 import { useVbenForm } from './form';
-import { DataSizeUtil } from './data-size-util';
 
 setupVbenVxeTable({
   configVxeTable: (vxeUI) => {
@@ -36,10 +36,29 @@ setupVbenVxeTable({
           enabled: false,
         },
         minHeight: 180,
+        toolbarConfig: {
+          buttons: [
+            {
+              code: 'create',
+              name: $t('common.new'),
+              status: 'primary',
+            },
+            {
+              code: 'delete',
+              name: $t('common.remove'),
+              status: 'danger',
+            },
+          ],
+          custom: true,
+          export: false,
+          refresh: true,
+          search: true,
+          zoom: true,
+        },
         proxyConfig: {
           autoLoad: true,
           response: {
-            result: 'items',
+            result: 'records',
             total: 'total',
             list: '',
           },
@@ -107,9 +126,9 @@ setupVbenVxeTable({
         const loadingKey = `__loading_${column.field}`;
         const finallyProps = {
           checkedChildren: $t('common.enabled'),
-          checkedValue: 1,
+          checkedValue: attrs?.checkedValue ?? 1,
           unCheckedChildren: $t('common.disabled'),
-          unCheckedValue: 0,
+          unCheckedValue: attrs?.unCheckedValue ?? 0,
           ...props,
           checked: row[column.field],
           loading: row[loadingKey] ?? false,
@@ -279,9 +298,41 @@ setupVbenVxeTable({
       },
     });
 
+    // 表格配置项可以用 cellRender: { name: 'CellValueLink' },
+    vxeUI.renderer.add('CellValueLink', {
+      renderTableDefault({ attrs }, { column, row }) {
+        return h(
+          Button,
+          {
+            size: 'small',
+            type: 'link',
+            onClick: () => attrs?.onClick?.({ code: attrs?.code, row }),
+          },
+          { default: () => row[column.field] },
+        );
+      },
+    });
+
+    // 表格配置项可以用 cellRender: { name: 'CellDataDictTag' },
+    vxeUI.renderer.add('CellDataDictTag', {
+      renderTableDefault({ attrs, props }, { column, row }) {
+        return h(
+          Tag,
+          { ...props },
+          {
+            default: () => {
+              const dataCode = row[column.field] || '';
+              const dictType = attrs?.dictType || column.field;
+              return getDataDictLabel(dictType, dataCode);
+            },
+          },
+        );
+      },
+    });
+
     // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
     // vxeUI.formats.add
-   vxeUI.formats.add('dataStorageUnit', {
+    vxeUI.formats.add('dataStorageUnit', {
       tableCellFormatMethod({ cellValue }) {
         return DataSizeUtil.format(cellValue);
       },

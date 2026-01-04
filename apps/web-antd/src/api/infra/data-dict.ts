@@ -20,7 +20,3 @@ export async function saveDataDictApi(param: any) {
 export async function removeDataDictApi(param: any) {
   return requestClient.post<any>('data/dict/remove-by-ids', param);
 }
-
-export async function loadAllDictionaryItemApi() {
-  return requestClient.get<OptionItemTreeModel[]>('/data/dict/all-tree');
-}
