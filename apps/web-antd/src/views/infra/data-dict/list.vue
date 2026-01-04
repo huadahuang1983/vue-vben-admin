@@ -1,207 +1,121 @@
 <script lang="ts" setup>
-import type { VbenFormProps } from '@vben/common-ui';
-
-import type { VxeGridProps } from '#/adapter/vxe-table';
-
-import { onMounted, ref } from 'vue';
-
 import { Page, useVbenDrawer } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
-import { DownOutlined } from '@ant-design/icons-vue';
-import {
-  Button,
-  Dropdown,
-  Menu,
-  MenuItem,
-  message,
-  Modal,
-} from 'ant-design-vue';
 
-import { createGridOptions } from '#/adapter/default-options';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { useVbenVxeGrid, type OnActionClickParams, type VxeGridListeners, type VxeTableGridOptions } from '#/adapter/vxe-table';
 import { loadDataDictPageApi, removeDataDictApi } from '#/api';
-import { useDictionaryStore } from '#/store/dictionary';
 
-import FormPage from './form.vue';
-import ItemListPage from './item-list.vue';
+import FormPage from './modules/form.vue';
+import ItemListPage from './modules/item-list.vue';
+import { useColumns, useGridFormSchema } from './data';
 
-const dictionaryStore = useDictionaryStore();
-const allDictMap = ref(new Map<string, Map<string, string>>());
-
-onMounted(async () => {
-  allDictMap.value = await dictionaryStore.getAllDictMap();
+const [ItemListDrawer, itemListDrawerApi] = useVbenDrawer({
+  connectedComponent: ItemListPage,
+  destroyOnClose: true,
 });
 
-const formOptions: VbenFormProps = {
-  collapsed: true,
-  schema: [
-    {
-      component: 'Input',
-      fieldName: 'dictCode',
-      label: $t('infra.dataDict.field.dictCode'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'dictName',
-      label: $t('infra.dataDict.field.dictName'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'status',
-      label: $t('infra.dataDict.field.status'),
-    },
-  ],
-};
-const gridOptions: VxeGridProps<any> = {
-  ...createGridOptions(loadDataDictPageApi),
-
-  columns: [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
-    { field: 'dictCode', title: $t('infra.dataDict.field.dictCode') },
-    { field: 'dictName', title: $t('infra.dataDict.field.dictName') },
-    {
-      field: 'status',
-      title: $t('infra.dataDict.field.status'),
-      slots: { default: 'status' },
-    },
-    { field: 'orderNo', title: $t('infra.dataDict.field.orderNo') },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: $t('common.action'),
-      width: 200,
-    },
-  ],
-};
-const [Grid, gridApi] = useVbenVxeGrid({ formOptions, gridOptions });
-
-const [FormViewer, formViewerApi] = useVbenDrawer({
+const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: FormPage,
-  onOpenChange(isOpen: boolean) {
-    if (!isOpen) {
-      const { success } = formViewerApi.getData();
-      if (success) {
-        gridApi.query();
-      }
+  destroyOnClose: true,
+  onClosed: onRefresh,
+});
+
+const gridEvents: VxeGridListeners = {
+  toolbarButtonClick(params) {
+    if (params.code === 'create') {
+      onCreate();
     }
   },
-});
-
-const formDefaultValues = {
-  status: 'enabled',
 };
 
-function add() {
-  const rowData = formDefaultValues;
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
-}
-
-function details(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-    disabled: true,
-  });
-  formViewerApi.open();
-}
-
-function edit(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
-}
-
-async function removeByIds(ids: Array<any>) {
-  if (!ids || ids.length === 0) {
-    message.warn($t('common.noDataSelected'));
-    return;
-  }
-  Modal.confirm({
-    onOk: async () => {
-      await removeDataDictApi(ids);
-      gridApi.query();
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    schema: useGridFormSchema(),
+    submitOnChange: true,
+  },
+  gridOptions: {
+    columns: useColumns(onActionClick),
+    height: 'auto',
+    keepSource: true,
+    proxyConfig: {
+      ajax: {
+        query: async ({ page }, formValues) => {
+          return await loadDataDictPageApi({
+            page: page.currentPage,
+            pageSize: page.pageSize,
+            ...formValues,
+          });
+        },
+        delete: ({ body }) => {
+          return onDelete(body.removeRecords);
+        },
+      },
     },
-    title: $t('common.deleteConfirm'),
-  });
-}
-
-async function batchRemove() {
-  const selectedRows = gridApi.grid.getCheckboxRecords();
-  const ids: Array<any> = [];
-  selectedRows.forEach((row) => {
-    ids.push(row.dataDictId);
-  });
-  await removeByIds(ids);
-}
-
-const [ItemListViewer, itemListViewerApi] = useVbenDrawer({
-  connectedComponent: ItemListPage,
-  onOpenChange() {},
+    rowConfig: {
+      keyField: 'dataDictId',
+    },
+  } as VxeTableGridOptions,
+  gridEvents,
 });
 
-function itemList(rowData: any) {
-  itemListViewerApi.setData({
-    // 表单值
-    values: rowData,
+function onCreate() {
+  formDrawerApi
+    .setData({ values: { status: 'enabled' } })
+    .open();
+}
+
+const onDelete = (removeRecords: any[]) => {
+  const recordIds = removeRecords.map((item) => item.dataDictId);
+  removeDataDictApi(recordIds).then(() => {
+    gridApi.query();
   });
-  itemListViewerApi.open();
+};
+
+function onEdit(row: any) {
+  formDrawerApi.setData({ values: row }).open();
+}
+
+function onDetail(row: any) {
+  formDrawerApi.setData({
+    values: row,
+    disabled: true,
+  });
+  formDrawerApi.open();
+}
+
+function onRefresh() {
+  gridApi.query();
+}
+
+function onItemList(row: any) {
+  itemListDrawerApi.setData({ values: row }).open();
+}
+
+function onActionClick(e: OnActionClickParams) {
+  switch (e.code) {
+    case 'delete': {
+      onDelete([e.row]);
+      break;
+    }
+    case 'edit': {
+      onEdit(e.row);
+      break;
+    }
+    case 'detail': {
+      onDetail(e.row);
+      break;
+    }
+    case 'data': {
+      onItemList(e.row);
+      break;
+    }
+  }
 }
 </script>
 <template>
   <Page auto-content-height>
-    <Grid>
-      <template #toolbar_buttons>
-        <Button class="mr-2" type="primary" @click="add()">
-          {{ $t('common.new') }}
-        </Button>
-        <Button class="mr-2" danger type="default" @click="batchRemove">
-          {{ $t('common.remove') }}
-        </Button>
-      </template>
-      <template #action="{ row }">
-        <Button class="mr-2 p-0" type="link" @click="details(row)">
-          {{ $t('common.details') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="edit(row)">
-          {{ $t('common.edit') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="itemList(row)">
-          {{ $t('infra.dataDict.itemList') }}
-        </Button>
-        <Dropdown trigger="click">
-          <Button class="p-0" type="link">
-            {{ $t('common.more') }}<DownOutlined />
-          </Button>
-          <template #overlay>
-            <Menu>
-              <MenuItem>
-                <Button
-                  class="mr-2 p-0"
-                  danger
-                  type="link"
-                  @click="removeByIds([row.dataDictId])"
-                >
-                  {{ $t('common.remove') }}
-                </Button>
-              </MenuItem>
-            </Menu>
-          </template>
-        </Dropdown>
-      </template>
-      <template #status="{ row }">
-        {{ allDictMap.get('GenericStatus')?.get(row.status) }}
-      </template>
-    </Grid>
-    <FormViewer />
-    <ItemListViewer />
+    <Grid />
+    <FormDrawer />
+    <ItemListDrawer />
   </Page>
 </template>

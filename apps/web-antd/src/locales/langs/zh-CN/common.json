@@ -13,7 +13,7 @@
   "edit": "编辑",
   "success": "成功",
   "failure": "失败",
-  "details": "详情",
+  "detail": "详情",
   "preview": "预览",
   "download": "下载",
   "noDataSelected": "请至少选择一条数据进行操作",
@@ -33,6 +33,7 @@
   "copyToClipboard": "复制到剪贴板",
   "copy": "复制",
   "sendSuccess": "发送成功",
+  "data": "数据",
   "image": {
     "zoomIn": "放大",
     "zoomOut": "缩小",

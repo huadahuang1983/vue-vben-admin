@@ -25,7 +25,8 @@ setupVbenVxeTable({
   configVxeTable: (vxeUI) => {
     vxeUI.setConfig({
       grid: {
-        align: 'center',
+        align: 'left',
+        headerAlign: 'center',
         border: false,
         columnConfig: {
           resizable: true,
@@ -306,7 +307,7 @@ setupVbenVxeTable({
           {
             size: 'small',
             type: 'link',
-            onClick: () => attrs?.onClick?.({ code: attrs?.code, row }),
+            onClick: () => attrs?.onClick?.({ code: attrs?.code ?? 'detail', row }),
           },
           { default: () => row[column.field] },
         );

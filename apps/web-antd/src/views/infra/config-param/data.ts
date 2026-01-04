@@ -92,9 +92,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
   ];
 }
 
-export function useColumns(
-  onActionClick: OnActionClickFn,
-): VxeTableGridOptions['columns'] {
+export function useColumns(onActionClick: OnActionClickFn): VxeTableGridOptions['columns'] {
   return [
     { title: '序号', type: 'seq', width: 50 },
     { align: 'left', type: 'checkbox', width: 50 },
@@ -103,7 +101,7 @@ export function useColumns(
       title: $t('infra.configParam.field.paramCode'),
       cellRender: {
         name: 'CellValueLink',
-        attrs: { code: 'view', onClick: onActionClick },
+        attrs: { onClick: onActionClick },
       },
     },
     { field: 'paramName', title: $t('infra.configParam.field.paramName') },

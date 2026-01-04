@@ -4,65 +4,13 @@ import { $t } from '@vben/locales';
 
 import { useVbenForm } from '#/adapter/form';
 import { saveDataDictApi } from '#/api';
+import { useFormSchema } from '../data';
 
 defineOptions({
   name: 'DataDictDrawer',
 });
 const [Form, formApi] = useVbenForm({
-  schema: [
-    {
-      component: 'Input',
-      componentProps: {
-        class: 'mr-2',
-      },
-      fieldName: 'dictCode',
-      label: $t('infra.dataDict.field.dictCode'),
-      rules: 'required',
-      description: '',
-    },
-    {
-      component: 'Input',
-      componentProps: {
-        class: 'mr-2',
-      },
-      fieldName: 'dictName',
-      label: $t('infra.dataDict.field.dictName'),
-      rules: 'required',
-      description: '',
-    },
-    {
-      component: 'DataDictRadioGroup',
-      componentProps: {
-        class: 'mr-2',
-        dictType: 'GenericStatus',
-      },
-      fieldName: 'status',
-      label: $t('infra.dataDict.field.status'),
-      rules: 'required',
-      description: '',
-    },
-    {
-      component: 'InputNumber',
-      componentProps: {
-        class: 'mr-2',
-      },
-      fieldName: 'orderNo',
-      label: $t('infra.dataDict.field.orderNo'),
-      rules: '',
-      description: '',
-    },
-    {
-      component: 'Textarea',
-      componentProps: {
-        class: 'mr-2',
-        rows: 4,
-      },
-      fieldName: 'remark',
-      label: $t('infra.dataDict.field.remark'),
-      rules: '',
-      description: '',
-    },
-  ],
+  schema: useFormSchema(),
   showDefaultActions: false,
   handleSubmit: onSubmit,
 });

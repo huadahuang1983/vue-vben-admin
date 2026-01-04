@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import type {
-  OnActionClickParams,
-  VxeGridListeners,
-  VxeTableGridOptions,
-} from '#/adapter/vxe-table';
+import { ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { loadConfigParamPageApi, removeConfigParamApi } from '#/api';
+import { useVbenVxeGrid, type OnActionClickParams, type VxeGridListeners, type VxeTableGridOptions } from '#/adapter/vxe-table';
+import { loadDataDictItemPageApi, removeDataDictItemApi } from '#/api';
 
-import { useColumns, useGridFormSchema } from './data';
-import FormPage from './modules/form.vue';
+import FormPage from './item-form.vue';
+import { useColumns, useGridFormSchema } from './item-data';
+import { $t } from '#/locales';
+
+const dataDictId = ref('');
+const dictCode = ref('');
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: FormPage,
@@ -39,7 +39,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async ({ page }, formValues) => {
-          return await loadConfigParamPageApi({
+          return await loadDataDictItemPageApi({
+            dataDictId: dataDictId.value,
+            dictCode: dictCode.value,
             page: page.currentPage,
             pageSize: page.pageSize,
             ...formValues,
@@ -51,7 +53,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
     },
     rowConfig: {
-      keyField: 'configParamId',
+      keyField: 'dictItemId',
     },
   } as VxeTableGridOptions,
   gridEvents,
@@ -59,13 +61,13 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 function onCreate() {
   formDrawerApi
-    .setData({ values: { paramType: 'public', status: 'enabled' } })
+    .setData({ values: { dataDictId: dataDictId.value, dictCode: dictCode.value, status: 'enabled' } })
     .open();
 }
 
 const onDelete = (removeRecords: any[]) => {
-  const recordIds = removeRecords.map((item) => item.configParamId);
-  removeConfigParamApi(recordIds).then(() => {
+  const recordIds = removeRecords.map((item) => item.dictItemId);
+  removeDataDictItemApi(recordIds).then(() => {
     gridApi.query();
   });
 };
@@ -102,10 +104,31 @@ function onActionClick(e: OnActionClickParams) {
     }
   }
 }
+
+const [Drawer, drawerApi] = useVbenDrawer({
+  onCancel() {
+    drawerApi.close();
+  },
+  onConfirm: async () => {
+    drawerApi.close();
+  },
+  onOpenChange(isOpen: boolean) {
+    if (isOpen) {
+      const { values } = drawerApi.getData<Record<string, any>>();
+      if (values) {
+        dataDictId.value = values.dataDictId;
+        dictCode.value = values.dictCode;
+      }
+    }
+  },
+  title: $t('infra.dataDict.title'),
+});
 </script>
 <template>
-  <Page auto-content-height>
-    <Grid />
-    <FormDrawer />
-  </Page>
+  <Drawer class="w-[800px]">
+    <Page auto-content-height>
+      <Grid />
+      <FormDrawer />
+    </Page>
+  </Drawer>
 </template>
