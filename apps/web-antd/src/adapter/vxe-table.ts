@@ -339,7 +339,7 @@ setupVbenVxeTable({
         return DataSizeUtil.format(cellValue);
       },
     });
-    vxeUI.formats.add('boolean', {
+    vxeUI.formats.add('booleanLocalized', {
       tableCellFormatMethod({ cellValue }) {
         if (cellValue === null || cellValue === undefined) {
           return '';
