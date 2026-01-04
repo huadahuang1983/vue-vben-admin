@@ -1,6 +1,7 @@
-import type { VbenFormSchema } from "#/adapter/form";
-import type { OnActionClickFn, VxeTableGridOptions } from "#/adapter/vxe-table";
-import { $t } from "#/locales";
+import type { VbenFormSchema } from '#/adapter/form';
+import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
+
+import { $t } from '#/locales';
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -71,19 +72,28 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'dictName',
       label: $t('infra.dataDict.field.dictName'),
     },
-  ]
+  ];
 }
 
-export function useColumns( onActionClick: OnActionClickFn ): VxeTableGridOptions['columns'] {
+export function useColumns(
+  onActionClick: OnActionClickFn,
+): VxeTableGridOptions['columns'] {
   return [
     { title: '序号', type: 'seq', width: 50 },
     { align: 'left', type: 'checkbox', width: 50 },
-    { field: 'dictCode', title: $t('infra.dataDict.field.dictCode'), cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } } },
+    {
+      field: 'dictCode',
+      title: $t('infra.dataDict.field.dictCode'),
+      cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
+    },
     { field: 'dictName', title: $t('infra.dataDict.field.dictName') },
     {
       field: 'status',
       title: $t('infra.dataDict.field.status'),
-      cellRender: { name: 'CellDataDictTag', attrs: { dictType: 'GenericStatus' } },
+      cellRender: {
+        name: 'CellDataDictTag',
+        attrs: { dictType: 'GenericStatus' },
+      },
     },
     { field: 'orderNo', title: $t('infra.dataDict.field.orderNo') },
     {
@@ -102,5 +112,5 @@ export function useColumns( onActionClick: OnActionClickFn ): VxeTableGridOption
       title: $t('common.operation'),
       width: 130,
     },
-  ]
+  ];
 }

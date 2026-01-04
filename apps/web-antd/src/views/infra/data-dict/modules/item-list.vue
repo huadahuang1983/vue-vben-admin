@@ -1,14 +1,20 @@
 <script lang="ts" setup>
+import type {
+  OnActionClickParams,
+  VxeGridListeners,
+  VxeTableGridOptions,
+} from '#/adapter/vxe-table';
+
 import { ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 
-import { useVbenVxeGrid, type OnActionClickParams, type VxeGridListeners, type VxeTableGridOptions } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { loadDataDictItemPageApi, removeDataDictItemApi } from '#/api';
-
-import FormPage from './item-form.vue';
-import { useColumns, useGridFormSchema } from './item-data';
 import { $t } from '#/locales';
+
+import { useColumns, useGridFormSchema } from './item-data';
+import FormPage from './item-form.vue';
 
 const dataDictId = ref('');
 const dictCode = ref('');
@@ -61,7 +67,13 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 function onCreate() {
   formDrawerApi
-    .setData({ values: { dataDictId: dataDictId.value, dictCode: dictCode.value, status: 'enabled' } })
+    .setData({
+      values: {
+        dataDictId: dataDictId.value,
+        dictCode: dictCode.value,
+        status: 'enabled',
+      },
+    })
     .open();
 }
 
@@ -94,12 +106,12 @@ function onActionClick(e: OnActionClickParams) {
       onDelete([e.row]);
       break;
     }
-    case 'edit': {
-      onEdit(e.row);
-      break;
-    }
     case 'detail': {
       onDetail(e.row);
+      break;
+    }
+    case 'edit': {
+      onEdit(e.row);
       break;
     }
   }

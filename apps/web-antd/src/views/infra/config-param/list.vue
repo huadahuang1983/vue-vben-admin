@@ -92,12 +92,12 @@ function onActionClick(e: OnActionClickParams) {
       onDelete([e.row]);
       break;
     }
-    case 'edit': {
-      onEdit(e.row);
-      break;
-    }
     case 'detail': {
       onDetail(e.row);
+      break;
+    }
+    case 'edit': {
+      onEdit(e.row);
       break;
     }
   }

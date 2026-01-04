@@ -1,6 +1,7 @@
-import type { VbenFormSchema } from "#/adapter/form";
-import type { OnActionClickFn, VxeTableGridOptions } from "#/adapter/vxe-table";
-import { $t } from "#/locales";
+import type { VbenFormSchema } from '#/adapter/form';
+import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
+
+import { $t } from '#/locales';
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -70,14 +71,20 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'dataName',
       label: $t('infra.dataDictItem.field.dataName'),
     },
-  ]
+  ];
 }
 
-export function useColumns( onActionClick: OnActionClickFn ): VxeTableGridOptions['columns'] {
+export function useColumns(
+  onActionClick: OnActionClickFn,
+): VxeTableGridOptions['columns'] {
   return [
-   { title: '序号', type: 'seq', width: 50 },
+    { title: '序号', type: 'seq', width: 50 },
     { align: 'left', type: 'checkbox', width: 50 },
-    { field: 'dictCode', title: $t('infra.dataDictItem.field.dictCode'), cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick }} },
+    {
+      field: 'dictCode',
+      title: $t('infra.dataDictItem.field.dictCode'),
+      cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
+    },
     { field: 'dataName', title: $t('infra.dataDictItem.field.dataName') },
     { field: 'dataCode', title: $t('infra.dataDictItem.field.dataCode') },
     {
@@ -106,5 +113,5 @@ export function useColumns( onActionClick: OnActionClickFn ): VxeTableGridOption
       title: $t('common.operation'),
       width: 130,
     },
-  ]
+  ];
 }

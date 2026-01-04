@@ -307,7 +307,8 @@ setupVbenVxeTable({
           {
             size: 'small',
             type: 'link',
-            onClick: () => attrs?.onClick?.({ code: attrs?.code ?? 'detail', row }),
+            onClick: () =>
+              attrs?.onClick?.({ code: attrs?.code ?? 'detail', row }),
           },
           { default: () => row[column.field] },
         );
