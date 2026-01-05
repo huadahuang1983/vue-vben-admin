@@ -52,9 +52,10 @@ export async function filePresignedRecordApi(param: FilePresignedParam) {
  * @returns
  */
 export async function uploadFileApi(
-  platform: string = '',
-  path: string = '',
-  file: File,
+  file: any,
+  platform?: string,
+  path?: string,
+  id?: string,
 ) {
   const originalFilename = file.name;
   const filename =
@@ -71,7 +72,7 @@ export async function uploadFileApi(
     contentType: mimeType,
   };
   const presignedResult = await filePresignedApi(presignedParam);
-  if (presignedResult) {
+  if (presignedResult && presignedResult.url) {
     const config = {
       headers: {
         ...presignedResult.headers,
@@ -90,9 +91,10 @@ export async function uploadFileApi(
       },
     };
     const formData = new FormData();
-    formData.append('platform', platform);
-    formData.append('path', path);
-    formData.append('file', file);
+    formData.append('platform', platform ?? '');
+    formData.append('path', path ?? '');
+    formData.append('id', id ?? '');
+    formData.append('file', file.originFileObj);
     return requestClient.post<FileInfoModel>(
       '/storage/file/upload',
       formData,
@@ -119,11 +121,13 @@ export async function uploadFileFormApi(formData: FormData) {
   );
 }
 
-export async function uploadImageDataApi(file: FileUploadRequestModel) {
-  return requestClient.post<FileInfoModel>(
-    '/storage/file/upload-image-data',
-    file,
-  );
+/**
+ * 上传Base64数据接口
+ * @param file
+ * @returns
+ */
+export async function uploadDataApi(file: FileUploadRequestModel) {
+  return requestClient.post<FileInfoModel>('/storage/file/upload', file);
 }
 
 export async function downloadFilePresignedApi(param: FilePresignedParam) {
@@ -136,10 +140,73 @@ export async function downloadFilePresignedApi(param: FilePresignedParam) {
   return filePresignedApi(presignedParam);
 }
 
-export async function loadFileDetailByIdApi(id: string) {
-  return requestClient.get(`file/detail/query-by-id/${id}`);
-}
-
 export async function deleteFileByIdApi(ids: Array<string>) {
   return requestClient.post('/storage/file/delete-by-ids', ids);
+}
+
+export function isImageFile(filename: string) {
+  const imageExtensions = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.bmp',
+    '.webp',
+    '.svg',
+  ];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return imageExtensions.includes(fileExtension);
+}
+
+export function isVideoFile(filename: string) {
+  const videoExtensions = ['.mp4', '.avi', '.mov', '.wmv', '.flv'];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return videoExtensions.includes(fileExtension);
+}
+
+export function isAudioFile(filename: string) {
+  const audioExtensions = ['.mp3', '.wav', '.aac', '.flac'];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return audioExtensions.includes(fileExtension);
+}
+
+export function isOfficeFile(filename: string) {
+  const officeExtensions = ['doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return officeExtensions.includes(fileExtension);
+}
+
+export function isTextFile(filename: string) {
+  const textExtensions = ['.txt', '.md', '.html', '.css', '.js'];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return textExtensions.includes(fileExtension);
+}
+
+export function isPdfFile(filename: string) {
+  const pdfExtensions = ['.pdf'];
+  const fileExtension = filename
+    .toLowerCase()
+    .slice(Math.max(0, filename.lastIndexOf('.')));
+  return pdfExtensions.includes(fileExtension);
+}
+
+export function isEmbedPreviewFile(filename: string) {
+  return (
+    isImageFile(filename) ||
+    isVideoFile(filename) ||
+    isAudioFile(filename) ||
+    isPdfFile(filename) ||
+    isOfficeFile(filename) ||
+    isTextFile(filename)
+  );
 }

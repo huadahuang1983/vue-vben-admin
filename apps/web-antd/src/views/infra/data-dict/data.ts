@@ -102,7 +102,7 @@ export function useColumns(
         options: ['data', 'edit', 'delete'],
         attrs: {
           nameField: 'dictName',
-          nameTitle: $t('infra.dataDict.title'),
+          nameTitle: $t('infra.dataDict.name'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

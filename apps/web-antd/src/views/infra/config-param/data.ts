@@ -130,7 +130,7 @@ export function useColumns(
       cellRender: {
         attrs: {
           nameField: 'paramName',
-          nameTitle: $t('infra.configParam.title'),
+          nameTitle: $t('infra.configParam.name'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

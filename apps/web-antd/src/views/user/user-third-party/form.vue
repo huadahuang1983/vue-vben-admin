@@ -54,7 +54,6 @@ async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
   values.userThirdPartyId = formData.userThirdPartyId;
   await saveUserThirdPartyApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

@@ -20,3 +20,7 @@ export async function saveFileDetailApi(param: any) {
 export async function removeFileDetailApi(param: any) {
   return requestClient.post<any>('file/detail/remove-by-ids', param);
 }
+
+export async function loadFileDetailByIdApi(id: string) {
+  return requestClient.get(`/file/detail/query-by-id/${id}`);
+}

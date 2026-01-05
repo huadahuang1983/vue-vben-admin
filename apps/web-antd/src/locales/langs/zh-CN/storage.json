@@ -2,6 +2,7 @@
   "title": "存储管理",
   "fileDetail": {
     "title": "文件管理",
+    "name": "文件",
     "field": {
       "url": "文件访问地址",
       "originalFilename": "原始文件名",
@@ -28,7 +29,7 @@
       "hashInfo": "哈希信息",
       "uploadId": "上传ID，仅在手动分片上传时使用",
       "uploadStatus": "上传状态，仅在手动分片上传时使用，1初始化完成，2上传完成",
-      "createTime": "创建时间"
+      "uploadTime": "上传时间"
     },
     "comment": {
       "size": "单位字节"

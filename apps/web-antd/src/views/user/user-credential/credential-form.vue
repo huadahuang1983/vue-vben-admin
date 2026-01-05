@@ -243,7 +243,6 @@ async function onSubmit(values: any) {
     params = { username: values.username, password: values.password };
   }
   await registerUserCredentialByUserIdApi(userId, params);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue';
-
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useVbenForm } from '#/adapter/form';
 import { uploadFileApi } from '#/api';
-import { FileUploader } from '#/components';
 
 const [Form, formApi] = useVbenForm({
   schema: [
@@ -32,12 +29,13 @@ const [Form, formApi] = useVbenForm({
       description: '',
     },
     {
-      component: shallowRef(FileUploader),
+      component: 'Upload',
       componentProps: {
         beforeUpload,
         maxCount: 1,
+        placeholder: $t('common.upload'),
       },
-      fieldName: 'file',
+      fieldName: 'fileList',
       label: $t('common.file'),
       rules: 'required',
     },
@@ -47,9 +45,6 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -58,14 +53,24 @@ const [Drawer, drawerApi] = useVbenDrawer({
     await formApi.submitForm();
     drawerApi.close();
   },
+  onOpenChange(isOpen: boolean) {
+    if (isOpen) {
+      const { values, disabled } = drawerApi.getData<Record<string, any>>();
+      if (values) {
+        formApi.setValues(values);
+      }
+      const enableEdit = !!disabled;
+      formApi.setState({ commonConfig: { disabled: enableEdit } });
+    }
+  },
   title: $t('common.upload'),
 });
 
 async function onSubmit(values: any) {
-  const { platform, path, file } = values;
-  await uploadFileApi(platform, path, file.file).then(() => {
-    drawerApi.setData({ success: true });
-  });
+  const { fileDetailId } = drawerApi.getData<Record<string, any>>();
+  const { platform, path, fileList } = values;
+  const file = fileList[0];
+  await uploadFileApi(file, platform, path, fileDetailId).then(() => {});
 }
 
 function beforeUpload() {

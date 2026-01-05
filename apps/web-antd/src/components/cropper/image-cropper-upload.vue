@@ -3,21 +3,18 @@ import { ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { uploadImageDataApi } from '#/api';
+import { uploadDataApi } from '#/api';
 import { ImageCropper } from '#/components';
 
 defineOptions({
   name: 'ImageCropperUpload',
 });
 
-const imageCropper = ref(null);
+const imageCropper = ref();
 const imageSrc = ref();
 const imageCropRound = ref();
 
 const [Modal, modalApi] = useVbenModal({
-  onCancel() {
-    modalApi.close();
-  },
   onConfirm: async () => {
     if (!imageCropper.value) {
       return;
@@ -27,7 +24,7 @@ const [Modal, modalApi] = useVbenModal({
       file: imageData,
       path: 'avatar/',
     };
-    const { url } = await uploadImageDataApi(file);
+    const { url } = await uploadDataApi(file);
     const { handler } = modalApi.getData<Record<string, any>>();
     if (handler) {
       handler(url, imageData);
@@ -46,7 +43,7 @@ const [Modal, modalApi] = useVbenModal({
 <template>
   <Modal class="w-[900px]">
     <ImageCropper
-      ref="imageCropper"
+      :ref="imageCropper"
       :crop-round="imageCropRound"
       :src="imageSrc"
     />

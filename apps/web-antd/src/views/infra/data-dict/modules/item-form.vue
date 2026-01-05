@@ -17,9 +17,6 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -47,7 +44,6 @@ async function onSubmit(values: any) {
   values.dictCode = formData.dictCode;
   values.dataDictId = formData.dataDictId;
   await saveDataDictItemApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

@@ -18,9 +18,6 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {

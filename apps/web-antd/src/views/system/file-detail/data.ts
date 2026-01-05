@@ -1,15 +1,10 @@
-<script lang="ts" setup>
-import { useVbenDrawer } from '@vben/common-ui';
-import { $t } from '@vben/locales';
+import type { VbenFormSchema } from '#/adapter/form';
+import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import { useVbenForm } from '#/adapter/form';
-import { saveFileDetailApi } from '#/api';
+import { $t } from '#/locales';
 
-defineOptions({
-  name: 'FileDetailDrawer',
-});
-const [Form, formApi] = useVbenForm({
-  schema: [
+export function useFormSchema(): VbenFormSchema[] {
+  return [
     {
       component: 'Input',
       componentProps: {
@@ -100,45 +95,68 @@ const [Form, formApi] = useVbenForm({
       rules: '',
       description: '',
     },
-  ],
-  showDefaultActions: false,
-  handleSubmit: onSubmit,
-});
-
-const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
-  onConfirm: async () => {
-    const { valid } = await formApi.validate();
-    if (!valid) {
-      return;
-    }
-    await formApi.submitForm();
-    drawerApi.close();
-  },
-  onOpenChange(isOpen: boolean) {
-    if (isOpen) {
-      const { values, disabled } = drawerApi.getData<Record<string, any>>();
-      if (values) {
-        formApi.setValues(values);
-      }
-      const enableEdit = !!disabled;
-      formApi.setState({ commonConfig: { disabled: enableEdit } });
-    }
-  },
-  title: $t('storage.fileDetail.title'),
-});
-
-async function onSubmit(values: any) {
-  const formData = drawerApi.getData().values;
-  values.fileDetailId = formData.fileDetailId;
-  await saveFileDetailApi(values);
-  drawerApi.setData({ success: true });
+  ];
 }
-</script>
-<template>
-  <Drawer class="w-[600px]">
-    <Form />
-  </Drawer>
-</template>
+
+export function useGridFormSchema(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'originalFilename',
+      label: $t('storage.fileDetail.field.originalFilename'),
+    },
+    {
+      component: 'Input',
+      fieldName: 'filename',
+      label: $t('storage.fileDetail.field.filename'),
+    },
+    {
+      component: 'Input',
+      fieldName: 'path',
+      label: $t('storage.fileDetail.field.path'),
+    },
+  ];
+}
+
+export function useColumns(
+  onActionClick: OnActionClickFn,
+): VxeTableGridOptions['columns'] {
+  return [
+    { title: '序号', type: 'seq', width: 50 },
+    { align: 'left', type: 'checkbox', width: 50 },
+    {
+      field: 'originalFilename',
+      title: $t('storage.fileDetail.field.originalFilename'),
+    },
+    { field: 'filename', title: $t('storage.fileDetail.field.filename') },
+    { field: 'path', title: $t('storage.fileDetail.field.path') },
+    {
+      field: 'size',
+      title: $t('storage.fileDetail.field.size'),
+      formatter: 'dataStorageUnit',
+    },
+    { field: 'contentType', title: $t('storage.fileDetail.field.contentType') },
+    { field: 'platform', title: $t('storage.fileDetail.field.platform') },
+    {
+      field: 'createTime',
+      title: $t('storage.fileDetail.field.uploadTime'),
+      formatter: 'formatDateTime',
+    },
+    {
+      align: 'center',
+      cellRender: {
+        options: ['replace', 'download', 'edit', 'delete'],
+        attrs: {
+          nameField: 'originalFilename',
+          nameTitle: $t('storage.fileDetail.name'),
+          onClick: onActionClick,
+        },
+        name: 'CellOperation',
+      },
+      field: 'operation',
+      fixed: 'right',
+      title: $t('common.operation'),
+      width: 180,
+    },
+  ];
+}

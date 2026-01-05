@@ -95,7 +95,6 @@ async function onSubmit(values: any) {
   const rawData = drawerApi.getData().values;
   const { userId } = rawData;
   await configUserCredentialByUserIdApi(userId, values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

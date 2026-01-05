@@ -2,6 +2,7 @@
   "title": "基础设施",
   "dataDict": {
     "title": "数据字典",
+    "name": "数据字典",
     "itemList": "明细列表",
     "field": {
       "dictCode": "代码",
@@ -17,7 +18,8 @@
     }
   },
   "dataDictItem": {
-    "title": "数据字典明细",
+    "title": "字典明细",
+    "name": "字典明细",
     "field": {
       "dictCode": "字典代码",
       "dataCode": "代码",
@@ -29,6 +31,7 @@
   },
   "configParam": {
     "title": "配置参数",
+    "name": "配置参数",
     "field": {
       "paramCode": "代码",
       "paramName": "名称",

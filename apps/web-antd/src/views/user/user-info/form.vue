@@ -133,7 +133,6 @@ async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
   values.userId = formData.userId;
   await saveUserInfoApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

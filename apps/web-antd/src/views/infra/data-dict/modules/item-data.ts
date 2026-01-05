@@ -103,7 +103,7 @@ export function useColumns(
       cellRender: {
         attrs: {
           nameField: 'dataName',
-          nameTitle: $t('infra.dataDictItem.title'),
+          nameTitle: $t('infra.dataDictItem.name'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

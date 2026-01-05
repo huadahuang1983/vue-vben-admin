@@ -240,7 +240,6 @@ async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
   values.messageTemplateId = formData.messageTemplateId;
   await saveMessageTemplateApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

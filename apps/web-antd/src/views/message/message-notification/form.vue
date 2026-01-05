@@ -43,7 +43,6 @@ async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
   values.messageNotificationId = formData.messageNotificationId;
   await saveMessageNotificationApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>

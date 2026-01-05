@@ -43,7 +43,6 @@ async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
   values.loginLogId = formData.loginLogId;
   await saveUserLoginApi(values);
-  drawerApi.setData({ success: true });
 }
 </script>
 <template>
