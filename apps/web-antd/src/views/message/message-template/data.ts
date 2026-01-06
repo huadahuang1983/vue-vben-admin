@@ -1,15 +1,10 @@
-<script lang="ts" setup>
-import { useVbenDrawer } from '@vben/common-ui';
-import { $t } from '@vben/locales';
+import type { VbenFormSchema } from '#/adapter/form';
+import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import { useVbenForm } from '#/adapter/form';
-import { saveMessageTemplateApi } from '#/api';
+import { $t } from '#/locales';
 
-defineOptions({
-  name: 'MessageTemplateDrawer',
-});
-const [Form, formApi] = useVbenForm({
-  schema: [
+export function useFormSchema(): VbenFormSchema[] {
+  return [
     {
       component: 'Input',
       componentProps: {
@@ -206,44 +201,85 @@ const [Form, formApi] = useVbenForm({
       rules: '',
       description: '',
     },
-  ],
-  showDefaultActions: false,
-  handleSubmit: onSubmit,
-});
-
-const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
-  onConfirm: async () => {
-    const { valid } = await formApi.validate();
-    if (!valid) {
-      return;
-    }
-    await formApi.submitForm();
-    drawerApi.close();
-  },
-  onOpenChange(isOpen: boolean) {
-    if (isOpen) {
-      const { values, disabled } = drawerApi.getData<Record<string, any>>();
-      if (values) {
-        formApi.setValues(values);
-      }
-      const enableEdit = !!disabled;
-      formApi.setState({ commonConfig: { disabled: enableEdit } });
-    }
-  },
-  title: $t('message.messageTemplate.title'),
-});
-
-async function onSubmit(values: any) {
-  const formData = drawerApi.getData().values;
-  values.messageTemplateId = formData.messageTemplateId;
-  await saveMessageTemplateApi(values);
+  ];
 }
-</script>
-<template>
-  <Drawer class="w-[600px]">
-    <Form />
-  </Drawer>
-</template>
+
+export function useGridFormSchema(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'templateCode',
+      label: $t('message.messageTemplate.field.templateCode'),
+    },
+    {
+      component: 'Input',
+      fieldName: 'title',
+      label: $t('message.messageTemplate.field.title'),
+    },
+  ];
+}
+
+export function useColumns(
+  onActionClick: OnActionClickFn,
+): VxeTableGridOptions['columns'] {
+  return [
+    { title: '序号', type: 'seq', width: 50 },
+    { align: 'left', type: 'checkbox', width: 50 },
+    {
+      field: 'templateCode',
+      title: $t('message.messageTemplate.field.templateCode'),
+      cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
+    },
+    { field: 'title', title: $t('message.messageTemplate.field.title') },
+    {
+      field: 'mediumType',
+      title: $t('message.messageTemplate.field.mediumType'),
+      cellRender: {
+        attrs: {
+          dictType: 'MediumType',
+        },
+        name: 'CellDataDictTag',
+      },
+    },
+    {
+      field: 'messageType',
+      title: $t('message.messageTemplate.field.messageType'),
+      cellRender: {
+        attrs: {
+          dictType: 'MessageType',
+        },
+        name: 'CellDataDictTag',
+      },
+    },
+    { field: 'bizType', title: $t('message.messageTemplate.field.bizType') },
+    {
+      field: 'channelId',
+      title: $t('message.messageTemplate.field.channelId'),
+    },
+    {
+      field: 'status',
+      title: $t('message.messageTemplate.field.status'),
+      cellRender: {
+        attrs: {
+          dictType: 'GenericStatus',
+        },
+        name: 'CellDataDictTag',
+      },
+    },
+    {
+      align: 'center',
+      cellRender: {
+        attrs: {
+          nameField: 'templateName',
+          nameTitle: $t('message.messageTemplate.name'),
+          onClick: onActionClick,
+        },
+        name: 'CellOperation',
+      },
+      field: 'operation',
+      fixed: 'right',
+      title: $t('common.operation'),
+      width: 130,
+    },
+  ];
+}

@@ -334,12 +334,12 @@ setupVbenVxeTable({
 
     // 这里可以自行扩展 vxe-table 的全局配置，比如自定义格式化
     // vxeUI.formats.add
-    vxeUI.formats.add('dataStorageUnit', {
+    vxeUI.formats.add('formatterDataStorageSize', {
       tableCellFormatMethod({ cellValue }) {
         return DataSizeUtil.format(cellValue);
       },
     });
-    vxeUI.formats.add('booleanLocalized', {
+    vxeUI.formats.add('formatterBoolean', {
       tableCellFormatMethod({ cellValue }) {
         if (cellValue === null || cellValue === undefined) {
           return '';

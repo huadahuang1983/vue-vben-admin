@@ -5,6 +5,7 @@
   },
   "messageTemplate": {
     "title": "消息模板",
+    "name": "消息模板",
     "field": {
       "templateCode": "模板代码",
       "title": "标题",

@@ -133,7 +133,7 @@ export function useColumns(
     {
       field: 'size',
       title: $t('storage.fileDetail.field.size'),
-      formatter: 'dataStorageUnit',
+      formatter: 'formatterDataStorageSize',
     },
     { field: 'contentType', title: $t('storage.fileDetail.field.contentType') },
     { field: 'platform', title: $t('storage.fileDetail.field.platform') },
