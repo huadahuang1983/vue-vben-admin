@@ -152,7 +152,15 @@ export function useColumns(
     { field: 'username', title: $t('user.userThirdParty.field.username') },
     { field: 'nickname', title: $t('user.userThirdParty.field.nickname') },
     { field: 'email', title: $t('user.userThirdParty.field.email') },
-    { field: 'gender', title: $t('user.userThirdParty.field.gender') },
-    { field: 'source', title: $t('user.userThirdParty.field.source') },
+    {
+      field: 'gender',
+      title: $t('user.userThirdParty.field.gender'),
+      width: 100,
+    },
+    {
+      field: 'source',
+      title: $t('user.userThirdParty.field.source'),
+      width: 100,
+    },
   ];
 }
