@@ -1,6 +1,5 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemRoleApi } from '#/api';
 
 import { $t } from '#/locales';
 
@@ -8,8 +7,14 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'name',
+      fieldName: 'roleName',
       label: $t('system.role.roleName'),
+      rules: 'required',
+    },
+    {
+      component: 'Input',
+      fieldName: 'roleCode',
+      label: $t('system.role.roleCode'),
       rules: 'required',
     },
     {
@@ -45,58 +50,39 @@ export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'name',
+      fieldName: 'roleName',
       label: $t('system.role.roleName'),
-    },
-    { component: 'Input', fieldName: 'id', label: $t('system.role.id') },
-    {
-      component: 'Select',
-      componentProps: {
-        allowClear: true,
-        options: [
-          { label: $t('common.enabled'), value: 'enabled' },
-          { label: $t('common.disabled'), value: 'disabled' },
-        ],
-      },
-      fieldName: 'status',
-      label: $t('system.role.status'),
     },
     {
       component: 'Input',
-      fieldName: 'remark',
-      label: $t('system.role.remark'),
-    },
-    {
-      component: 'RangePicker',
-      fieldName: 'createTime',
-      label: $t('system.role.createTime'),
+      fieldName: 'roleCode',
+      label: $t('system.role.roleCode'),
     },
   ];
 }
 
-export function useColumns<T = SystemRoleApi.SystemRole>(
-  onActionClick: OnActionClickFn<T>,
-  onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
+export function useColumns(
+  onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
+    { title: $t('common.sequence'), type: 'seq', width: 50 },
+    { align: 'left', type: 'checkbox', width: 50 },
     {
-      field: 'name',
+      field: 'roleName',
       title: $t('system.role.roleName'),
       width: 200,
     },
     {
-      field: 'id',
-      title: $t('system.role.id'),
+      field: 'roleCode',
+      title: $t('system.role.roleCode'),
       width: 200,
     },
     {
       cellRender: {
         attrs: {
-          beforeChange: onStatusChange,
-          checkedValue: 'enabled',
-          unCheckedValue: 'disabled',
+          dictType: 'GenericStatus',
         },
-        name: onStatusChange ? 'CellSwitch' : 'CellTag',
+        name: 'CellDataDictTag',
       },
       field: 'status',
       title: $t('system.role.status'),
@@ -116,7 +102,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       align: 'center',
       cellRender: {
         attrs: {
-          nameField: 'name',
+          nameField: 'roleName',
           nameTitle: $t('system.role.name'),
           onClick: onActionClick,
         },

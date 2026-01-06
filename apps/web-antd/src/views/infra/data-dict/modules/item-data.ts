@@ -78,7 +78,7 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: '序号', type: 'seq', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 50 },
     { align: 'left', type: 'checkbox', width: 50 },
     {
       field: 'dictCode',
