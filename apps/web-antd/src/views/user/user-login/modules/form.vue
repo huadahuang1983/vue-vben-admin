@@ -3,32 +3,20 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useVbenForm } from '#/adapter/form';
-import { saveUserThirdPartyApi } from '#/api';
+import { saveUserLoginApi } from '#/api';
+
+import { useFormSchema } from '../data';
 
 defineOptions({
-  name: 'UserThirdPartyDrawer',
+  name: 'UserLoginDrawer',
 });
 const [Form, formApi] = useVbenForm({
-  schema: [
-    {
-      component: 'Input',
-      componentProps: {
-        class: 'mr-2',
-      },
-      fieldName: 'userId',
-      label: $t('user.userThirdParty.field.userId'),
-      rules: '',
-      description: '',
-    },
-  ],
+  schema: useFormSchema(),
   showDefaultActions: false,
   handleSubmit: onSubmit,
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -47,13 +35,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState({ commonConfig: { disabled: enableEdit } });
     }
   },
-  title: $t('user.userThirdParty.title'),
+  title: $t('user.userLogin.title'),
 });
 
 async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
-  values.userThirdPartyId = formData.userThirdPartyId;
-  await saveUserThirdPartyApi(values);
+  values.loginLogId = formData.loginLogId;
+  await saveUserLoginApi(values);
 }
 </script>
 <template>

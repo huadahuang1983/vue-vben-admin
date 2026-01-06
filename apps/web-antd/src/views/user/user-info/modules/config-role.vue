@@ -8,15 +8,16 @@ import { CheckboxGroup } from 'ant-design-vue';
 import { useVbenForm } from '#/adapter/form';
 import {
   loadAllEnabledRoleApi,
-  loadRoleIdsByUserApi,
-  saveUserRoleByUserApi,
+  loadRoleByUserIdApi,
+  saveRoleByUserIdApi,
 } from '#/api';
+import { $t } from '#/locales';
 
 defineOptions({
   name: 'ConfigRoleDrawer',
 });
 
-const allRoles = ref<string[]>([]);
+const allRoles = ref();
 const checkedRoleIds = ref<string[]>([]);
 
 const [Form, formApi] = useVbenForm({
@@ -25,9 +26,6 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -45,7 +43,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       }
     }
   },
-  title: '配置权限',
+  title: $t('user.configRole'),
 });
 
 function getUserId() {
@@ -55,21 +53,21 @@ function getUserId() {
 }
 
 async function onSubmit() {
-  await saveUserRoleByUserApi(getUserId(), checkedRoleIds.value);
+  await saveRoleByUserIdApi(getUserId(), checkedRoleIds.value);
 }
 
 function loadRole() {
   loadAllEnabledRoleApi().then((res) => {
-    const roles = [];
-    res.forEach((element) => {
+    const roles: any[] = [];
+    res.forEach((element: any) => {
       roles.push({
         label: element.roleName,
         value: element.roleId,
       });
     });
     allRoles.value = roles;
-    loadRoleIdsByUserApi(getUserId()).then((res) => {
-      checkedRoleIds.value = res;
+    loadRoleByUserIdApi(getUserId()).then((res) => {
+      checkedRoleIds.value = res.map((item: any) => item.roleId);
     });
   });
 }

@@ -158,7 +158,12 @@ export function useColumns(
       field: 'receiverId',
       title: $t('message.messageNotification.field.receiverId'),
     },
-    { field: 'isRead', title: $t('message.messageNotification.field.isRead') },
+    {
+      field: 'isRead',
+      title: $t('message.messageNotification.field.isRead'),
+      formatter: 'formatBoolean',
+      width: 40,
+    },
     {
       field: 'senderName',
       title: $t('message.messageNotification.field.senderName'),
@@ -166,13 +171,15 @@ export function useColumns(
     {
       field: 'sendTime',
       title: $t('message.messageNotification.field.sendTime'),
+      formatter: 'formatDateTime',
+      width: 110,
     },
     {
       align: 'center',
       cellRender: {
         attrs: {
-          nameField: 'templateName',
-          nameTitle: $t('message.messageTemplate.name'),
+          nameField: 'title',
+          nameTitle: $t('message.messageNotification.name'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

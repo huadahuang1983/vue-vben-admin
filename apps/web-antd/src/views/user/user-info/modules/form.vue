@@ -3,21 +3,20 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useVbenForm } from '#/adapter/form';
-import { saveUserLoginApi } from '#/api';
+import { saveUserInfoApi } from '#/api';
+
+import { useFormSchema } from '../data';
 
 defineOptions({
-  name: 'UserLoginDrawer',
+  name: 'UserInfoDrawer',
 });
 const [Form, formApi] = useVbenForm({
-  schema: [],
+  schema: useFormSchema(),
   showDefaultActions: false,
   handleSubmit: onSubmit,
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -36,13 +35,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState({ commonConfig: { disabled: enableEdit } });
     }
   },
-  title: $t('user.userLogin.title'),
+  title: $t('user.userInfo.title'),
 });
 
 async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
-  values.loginLogId = formData.loginLogId;
-  await saveUserLoginApi(values);
+  values.userId = formData.userId;
+  await saveUserInfoApi(values);
 }
 </script>
 <template>

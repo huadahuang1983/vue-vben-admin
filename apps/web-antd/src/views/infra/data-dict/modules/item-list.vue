@@ -118,12 +118,6 @@ function onActionClick(e: OnActionClickParams) {
 }
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
-  onConfirm: async () => {
-    drawerApi.close();
-  },
   onOpenChange(isOpen: boolean) {
     if (isOpen) {
       const { values } = drawerApi.getData<Record<string, any>>();

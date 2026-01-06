@@ -12,6 +12,7 @@
   "verifyCode": "验证码",
   "userInfo": {
     "title": "用户信息",
+    "name": "用户信息",
     "field": {
       "phoneNumber": "联系电话",
       "phoneNumberStatus": "电话状态",
@@ -37,6 +38,7 @@
   },
   "userCredential": {
     "title": "用户凭证",
+    "name": "用户凭证",
     "accountType": "账号类型",
     "field": {
       "userId": "用户编号",
@@ -58,6 +60,7 @@
   },
   "userLogin": {
     "title": "登录记录",
+    "name": "登录记录",
     "field": {
       "userCredentialId": "凭证编号",
       "userId": "用户编号",
@@ -76,6 +79,7 @@
   },
   "userThirdParty": {
     "title": "三方用户",
+    "name": "三方用户",
     "field": {
       "userId": "用户编号",
       "uuid": "第三方id",

@@ -1,254 +1,135 @@
 <script lang="ts" setup>
-import type { VbenFormProps } from '@vben/common-ui';
-
-import type { VxeGridProps } from '#/adapter/vxe-table';
-
-import { onMounted, ref } from 'vue';
+import type {
+  OnActionClickParams,
+  VxeGridListeners,
+  VxeTableGridOptions,
+} from '#/adapter/vxe-table';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { DownOutlined } from '@ant-design/icons-vue';
-import {
-  Button,
-  Dropdown,
-  Menu,
-  MenuItem,
-  message,
-  Modal,
-} from 'ant-design-vue';
-
-import { createGridOptions } from '#/adapter/default-options';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import {
-  loadUserCredentialByUserIdApi,
-  loadUserInfoPageApi,
-  removeUserInfoApi,
-} from '#/api';
-import { useDictionaryStore } from '#/store/dictionary';
+import { loadUserInfoPageApi, removeUserInfoApi } from '#/api';
 
-import AccountManagerFormPage from '../user-credential/credential-form.vue';
-import CredentialManagerFormPage from '../user-credential/form.vue';
-import ConfigRolePage from './config-role.vue';
-import FormPage from './form.vue';
+import { useColumns, useGridFormSchema } from './data';
+import ConfigRolePage from './modules/config-role.vue';
+import FormPage from './modules/form.vue';
 
-const dictionaryStore = useDictionaryStore();
-const allDictMap = ref(new Map<string, Map<string, string>>());
-
-onMounted(async () => {
-  allDictMap.value = await dictionaryStore.getAllDictMap();
+const [FormDrawer, formDrawerApi] = useVbenDrawer({
+  connectedComponent: FormPage,
+  destroyOnClose: true,
+  onClosed: onRefresh,
 });
 
-const formOptions: VbenFormProps = {
-  collapsed: true,
-  schema: [
-    {
-      component: 'Input',
-      fieldName: 'phoneNumber',
-      label: $t('user.userInfo.field.phoneNumber'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'nickname',
-      label: $t('user.userInfo.field.nickname'),
-    },
-  ],
-};
-const gridOptions: VxeGridProps<any> = {
-  ...createGridOptions(loadUserInfoPageApi),
-
-  columns: [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
-    { field: 'phoneNumber', title: $t('user.userInfo.field.phoneNumber') },
-    { field: 'nickname', title: $t('user.userInfo.field.nickname') },
-    {
-      field: 'gender',
-      title: $t('user.userInfo.field.gender'),
-      slots: { default: 'gender' },
-    },
-    { field: 'email', title: $t('user.userInfo.field.email') },
-    { field: 'registerTime', title: $t('user.userInfo.field.registerTime') },
-    {
-      field: 'userStatus',
-      title: $t('user.userInfo.field.userStatus'),
-      slots: { default: 'userStatus' },
-    },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: $t('common.action'),
-      width: 260,
-    },
-  ],
-};
-const [Grid, gridApi] = useVbenVxeGrid({ formOptions, gridOptions });
-
-const [FormViewer, formViewerApi] = useVbenDrawer({
-  connectedComponent: FormPage,
-  onOpenChange(isOpen: boolean) {
-    if (!isOpen) {
-      const { success } = formViewerApi.getData();
-      if (success) {
-        gridApi.query();
-      }
+const gridEvents: VxeGridListeners = {
+  toolbarButtonClick(params) {
+    if (params.code === 'create') {
+      onCreate();
     }
   },
+};
+
+const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    schema: useGridFormSchema(),
+    submitOnChange: true,
+  },
+  gridOptions: {
+    columns: useColumns(onActionClick),
+    height: 'auto',
+    keepSource: true,
+    toolbarConfig: {
+      buttons: [
+        {
+          code: 'delete',
+          name: $t('common.remove'),
+          status: 'danger',
+        },
+      ],
+    },
+    proxyConfig: {
+      ajax: {
+        query: async ({ page }, formValues) => {
+          return await loadUserInfoPageApi({
+            page: page.currentPage,
+            pageSize: page.pageSize,
+            ...formValues,
+          });
+        },
+        delete: ({ body }) => {
+          return onDelete(body.removeRecords);
+        },
+      },
+    },
+    rowConfig: {
+      keyField: 'userId',
+    },
+  } as VxeTableGridOptions,
+  gridEvents,
 });
 
-const formDefaultValues = { userStatus: 'normal', gender: 'male' };
-
-function add() {
-  const rowData = formDefaultValues;
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
+function onCreate() {
+  formDrawerApi.setData({ values: { status: 'enabled' } }).open();
 }
 
-function details(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
+const onDelete = (removeRecords: any[]) => {
+  const recordIds = removeRecords.map((item) => item.userId);
+  removeUserInfoApi(recordIds).then(() => {
+    gridApi.query();
+  });
+};
+
+function onEdit(row: any) {
+  formDrawerApi.setData({ values: row }).open();
+}
+
+function onDetail(row: any) {
+  formDrawerApi.setData({
+    values: row,
     disabled: true,
   });
-  formViewerApi.open();
+  formDrawerApi.open();
 }
 
-function edit(rowData: any) {
-  formViewerApi.setData({
-    // 表单值
-    values: rowData,
-  });
-  formViewerApi.open();
+function onRefresh() {
+  gridApi.query();
 }
 
-async function removeByIds(ids: Array<any>) {
-  if (!ids || ids.length === 0) {
-    message.warn($t('common.noDataSelected'));
-    return;
+function onActionClick(e: OnActionClickParams) {
+  switch (e.code) {
+    case 'configRole': {
+      onConfigRole(e.row);
+      break;
+    }
+    case 'delete': {
+      onDelete([e.row]);
+      break;
+    }
+    case 'detail': {
+      onDetail(e.row);
+      break;
+    }
+    case 'edit': {
+      onEdit(e.row);
+      break;
+    }
   }
-  Modal.confirm({
-    onOk: async () => {
-      await removeUserInfoApi(ids);
-      gridApi.query();
-    },
-    title: $t('common.deleteConfirm'),
-  });
 }
 
-async function batchRemove() {
-  const selectedRows = gridApi.grid.getCheckboxRecords();
-  const ids: Array<any> = [];
-  selectedRows.forEach((row) => {
-    ids.push(row.userId);
-  });
-  await removeByIds(ids);
-}
-
-const [ConfigRoleViewer, configRoleViewerApi] = useVbenDrawer({
+const [ConfigRoleDrawer, configRoleDrawerApi] = useVbenDrawer({
   connectedComponent: ConfigRolePage,
 });
-function editConfigRole(rowData: any) {
-  configRoleViewerApi.setData({
-    // 表单值
-    values: rowData,
+function onConfigRole(row: any) {
+  configRoleDrawerApi.setData({
+    values: row,
   });
-  configRoleViewerApi.open();
-}
-
-const [AccountManagerFormViewer, accountManagerFormViewerApi] = useVbenDrawer({
-  connectedComponent: AccountManagerFormPage,
-});
-function editAccount(rowData: any) {
-  const { userId } = rowData;
-  loadUserCredentialByUserIdApi(userId).then((res) => {
-    accountManagerFormViewerApi.setData({
-      // 表单值
-      values: { ...res, accountType: 'phoneNumber', userId },
-    });
-    accountManagerFormViewerApi.open();
-  });
-}
-const [CredentialManagerFormViewer, credentialManagerFormViewerApi] =
-  useVbenDrawer({
-    connectedComponent: CredentialManagerFormPage,
-  });
-function editCredential(rowData: any) {
-  const { userId } = rowData;
-  loadUserCredentialByUserIdApi(userId).then((res) => {
-    credentialManagerFormViewerApi.setData({
-      // 表单值
-      values: { ...res, userId },
-    });
-    credentialManagerFormViewerApi.open();
-  });
+  configRoleDrawerApi.open();
 }
 </script>
 <template>
   <Page auto-content-height>
-    <Grid>
-      <template #toolbar_buttons>
-        <Button class="mr-2" type="primary" @click="add()">
-          {{ $t('common.new') }}
-        </Button>
-        <Button class="mr-2" danger type="default" @click="batchRemove">
-          {{ $t('common.remove') }}
-        </Button>
-      </template>
-      <template #action="{ row }">
-        <Button class="mr-2 p-0" type="link" @click="details(row)">
-          {{ $t('common.details') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="edit(row)">
-          {{ $t('common.edit') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="editAccount(row)">
-          {{ $t('user.accountManager') }}
-        </Button>
-        <Button class="mr-2 p-0" type="link" @click="editCredential(row)">
-          {{ $t('user.credentialManager') }}
-        </Button>
-        <Button
-          class="mr-2 p-0"
-          type="link"
-          v-access:code="'AC_100100'"
-          @click="editConfigRole(row)"
-        >
-          {{ $t('user.configRole') }}
-        </Button>
-        <Dropdown trigger="click">
-          <Button class="p-0" type="link">
-            {{ $t('common.more') }}<DownOutlined />
-          </Button>
-          <template #overlay>
-            <Menu>
-              <MenuItem>
-                <Button
-                  class="mr-2 p-0"
-                  danger
-                  type="link"
-                  @click="removeByIds([row.userId])"
-                >
-                  {{ $t('common.remove') }}
-                </Button>
-              </MenuItem>
-            </Menu>
-          </template>
-        </Dropdown>
-      </template>
-      <template #gender="{ row }">
-        {{ allDictMap.get('Gender')?.get(row.gender) }}
-      </template>
-      <template #userStatus="{ row }">
-        {{ allDictMap.get('UserStatus')?.get(row.userStatus) }}
-      </template>
-    </Grid>
-    <FormViewer />
-    <ConfigRoleViewer />
-    <AccountManagerFormViewer />
-    <CredentialManagerFormViewer />
+    <Grid />
+    <FormDrawer />
+    <ConfigRoleDrawer />
   </Page>
 </template>
