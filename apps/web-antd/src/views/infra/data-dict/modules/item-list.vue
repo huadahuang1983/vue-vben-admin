@@ -51,6 +51,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             page: page.currentPage,
             pageSize: page.pageSize,
             ...formValues,
+            orders: [{ column: 'order_no', asc: true }],
           });
         },
         delete: ({ body }) => {

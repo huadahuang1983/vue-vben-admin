@@ -38,6 +38,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             page: page.currentPage,
             pageSize: page.pageSize,
             ...formValues,
+            orders: [{ column: 'login_log_id', asc: false }],
           });
         },
       },
