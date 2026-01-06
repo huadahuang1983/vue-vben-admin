@@ -3,21 +3,20 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useVbenForm } from '#/adapter/form';
-import { saveMessageNotificationApi } from '#/api';
+import { saveMessageHistoryApi } from '#/api';
+
+import { useFormSchema } from '../data';
 
 defineOptions({
-  name: 'MessageNotificationDrawer',
+  name: 'MessageHistoryDrawer',
 });
 const [Form, formApi] = useVbenForm({
-  schema: [],
+  schema: useFormSchema(),
   showDefaultActions: false,
   handleSubmit: onSubmit,
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
-  onCancel() {
-    drawerApi.close();
-  },
   onConfirm: async () => {
     const { valid } = await formApi.validate();
     if (!valid) {
@@ -36,13 +35,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState({ commonConfig: { disabled: enableEdit } });
     }
   },
-  title: $t('message.messageNotification.title'),
+  title: $t('message.messageHistory.title'),
 });
 
 async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
-  values.messageNotificationId = formData.messageNotificationId;
-  await saveMessageNotificationApi(values);
+  values.messageHistoryId = formData.messageHistoryId;
+  await saveMessageHistoryApi(values);
 }
 </script>
 <template>

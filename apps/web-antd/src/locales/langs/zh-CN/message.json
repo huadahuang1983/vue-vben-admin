@@ -31,6 +31,7 @@
   },
   "messageHistory": {
     "title": "消息记录",
+    "name": "消息记录",
     "field": {
       "messageTemplateId": "模板编号",
       "title": "标题",
@@ -54,6 +55,7 @@
   },
   "messageNotification": {
     "title": "消息通知",
+    "name": "消息通知",
     "field": {
       "messageHistoryId": "消息记录编号",
       "title": "标题",
