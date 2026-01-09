@@ -14,20 +14,6 @@ export interface CodeLoginParams {
   verifyCode: string;
 }
 
-export interface OAuth2AuthenticationResult {
-  accessToken: string;
-  expireAt: Date;
-  redirectUrl: string;
-}
-
-export interface OAuth2BindParam {
-  securityId: any;
-  username?: string;
-  password?: string;
-  receiver?: string;
-  verifyCode?: string;
-}
-
 export interface QrcodeSessionResult {
   sessionId: string;
   expireIn: number;
@@ -43,13 +29,6 @@ export interface OAuth2CodeLoginParam {
   registrationId: any;
   code: any;
   state: any;
-}
-
-export interface OAuth2CodeLoginResult {
-  redirectUrl: string;
-  securityId: string;
-  isBound: boolean;
-  accessToken: string;
 }
 
 /**
@@ -95,25 +74,26 @@ export async function loadQrcodeSessionApi() {
  */
 export async function loadAllOauth2PlatformApi() {
   return requestClient.get<ClientRegistrationResult[]>(
-    '/oauth2/client-registration/all',
+    '/oauth2/client-registration/icons',
   );
 }
 
 /**
  * 获取指定平台的Oauth2授权地址
  */
-export function loadOauth2AuthorizeUrlApi(params: string) {
-  return requestClient.get<string>(`/oauth2/authorization/${params}`);
+export function loadOauth2AuthorizeUrlApi(registrationId: string) {
+  return requestClient.get<string>(`/oauth2/authorization/${registrationId}`);
+}
+
+export async function checkOauth2UserBindApi(params: any) {
+  return requestClient.post(`/oauth2/user/check-bind`, params);
 }
 
 /**
  * Oauth2登录成功后的用户绑定，即外部用户编号与内部用户编号绑定
  */
-export function oauth2BindUserApi(params: OAuth2BindParam) {
-  return requestClient.post<OAuth2AuthenticationResult>(
-    '/oauth2/client-registration/bind',
-    params,
-  );
+export function oauth2BindUserApi(params: any) {
+  return requestClient.post('/oauth2/user/bind', params);
 }
 
 /**
@@ -122,7 +102,7 @@ export function oauth2BindUserApi(params: OAuth2BindParam) {
 export async function oauth2CodeAuthenticationApi(
   params: OAuth2CodeLoginParam,
 ) {
-  return requestClient.get<OAuth2CodeLoginResult>(
+  return requestClient.get(
     `/login/oauth2/code/${params.registrationId}?code=${params.code}&state=${params.state}`,
   );
 }

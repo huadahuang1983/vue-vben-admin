@@ -9,9 +9,13 @@ import { $t } from '@vben/locales';
 
 import { useAuthStore } from '#/store';
 
+import ThirdPartyLogin from './third-party-login.vue';
+
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
+
+const showThirdPartyLogin = true;
 
 const MOCK_USER_OPTIONS: BasicOption[] = [
   {
@@ -94,5 +98,9 @@ const formSchema = computed((): VbenFormSchema[] => {
     :form-schema="formSchema"
     :loading="authStore.loginLoading"
     @submit="authStore.authLogin"
-  />
+  >
+    <template #third-party-login>
+      <ThirdPartyLogin v-if="showThirdPartyLogin" />
+    </template>
+  </AuthenticationLogin>
 </template>

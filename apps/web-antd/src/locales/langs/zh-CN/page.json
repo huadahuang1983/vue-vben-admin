@@ -8,7 +8,10 @@
     "forgetResetPassword": "密码重置",
     "profile": "个人中心",
     "resetPassword": "重置密码",
-    "resetPasswordDescription": "请输入新密码，如果时间过期，请重新操作忘记密码"
+    "resetPasswordDescription": "请输入新密码，如果时间过期，请重新操作忘记密码",
+    "oauth2BindUser": "绑定用户",
+    "oauth2BindUserDescription": "请输入手机号码进行账户绑定",
+    "bindUser": "绑定"
   },
   "dashboard": {
     "title": "概览",

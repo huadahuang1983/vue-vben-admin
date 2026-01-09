@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import type { VbenFormSchema } from '@vben/common-ui';
 
-import type { OAuth2BindParam } from '#/api';
-
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -55,15 +53,16 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-async function handleSubmit(param: any) {
+async function handleSubmit(params: any) {
   const routeParams = router.currentRoute.value.query;
-  const userBind: OAuth2BindParam = {
-    securityId: routeParams.securityId,
-    receiver: param.phoneNumber,
-    verifyCode: param.code,
+  const { accessToken } = routeParams;
+  const userBind = {
+    accessToken: routeParams.accessToken,
+    username: params.phoneNumber,
+    verificationCode: params.code,
   };
-  const bindResult = await oauth2BindUserApi(userBind);
-  authStore.authLogin({ accessToken: bindResult.accessToken });
+  await oauth2BindUserApi(userBind);
+  authStore.authLogin({ accessToken });
 }
 </script>
 
@@ -71,6 +70,9 @@ async function handleSubmit(param: any) {
   <AuthenticationCodeLogin
     :form-schema="formSchema"
     :loading="loading"
+    :title="$t('page.auth.oauth2BindUser')"
+    :sub-title="$t('page.auth.oauth2BindUserDescription')"
+    :submit-button-text="$t('page.auth.bindUser')"
     @submit="handleSubmit"
   />
 </template>

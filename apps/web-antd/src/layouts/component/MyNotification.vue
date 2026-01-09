@@ -31,15 +31,12 @@ const showDot = computed(() =>
 const sse = ref();
 
 function connectServer() {
-  const eventSource = new EventSourcePolyfill(
-    `${import.meta.env.VITE_GLOB_API_URL}/sse/connect/private`,
-    {
-      heartbeatTimeout: 300_000,
-      headers: {
-        Authorization: `Bearer ${accessStore.accessToken}`,
-      },
+  const eventSource = new EventSourcePolyfill(`/api/message/sse`, {
+    heartbeatTimeout: 300_000,
+    headers: {
+      Authorization: `Bearer ${accessStore.accessToken}`,
     },
-  );
+  });
   sse.value = eventSource;
   eventSource.addEventListener('message', (event) => {
     handleMessage(event.data);
