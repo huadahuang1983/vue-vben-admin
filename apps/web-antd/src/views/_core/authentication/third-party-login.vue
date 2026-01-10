@@ -8,11 +8,7 @@ import { $t } from '@vben/locales';
 
 import { Button } from 'ant-design-vue';
 
-import {
-  loadAllOauth2PlatformApi,
-  loadOauth2AuthorizeUrlApi,
-  openWindow,
-} from '#/api';
+import { loadAllOauth2PlatformApi, loadOauth2AuthorizeUrlApi } from '#/api';
 
 defineOptions({
   name: 'ThirdPartyLogin',
@@ -31,8 +27,8 @@ onMounted(async () => {
 });
 
 async function authorize(registrationId: string) {
-  const authorizeUrl = await loadOauth2AuthorizeUrlApi(registrationId);
-  openWindow(authorizeUrl, 'Authorize');
+  const { url } = await loadOauth2AuthorizeUrlApi(registrationId);
+  window.location.href = url;
 }
 </script>
 

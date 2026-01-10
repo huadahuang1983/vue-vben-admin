@@ -81,8 +81,14 @@ export async function loadAllOauth2PlatformApi() {
 /**
  * 获取指定平台的Oauth2授权地址
  */
-export function loadOauth2AuthorizeUrlApi(registrationId: string) {
-  return requestClient.get<string>(`/oauth2/authorization/${registrationId}`);
+export async function loadOauth2AuthorizeUrlApi(registrationId: string) {
+  const body = await requestClient.get(
+    `/oauth2/authorization/${registrationId}`,
+    {
+      responseReturn: 'raw',
+    },
+  );
+  return body.data;
 }
 
 export async function checkOauth2UserBindApi(params: any) {
@@ -102,9 +108,13 @@ export function oauth2BindUserApi(params: any) {
 export async function oauth2CodeAuthenticationApi(
   params: OAuth2CodeLoginParam,
 ) {
-  return requestClient.get(
+  const body = await requestClient.get(
     `/login/oauth2/code/${params.registrationId}?code=${params.code}&state=${params.state}`,
+    {
+      responseReturn: 'raw',
+    },
   );
+  return body.data;
 }
 
 export function createPincodeText(countdown: number) {
