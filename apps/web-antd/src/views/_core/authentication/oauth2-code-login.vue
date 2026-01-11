@@ -23,9 +23,9 @@ async function handleSubmit() {
   const { accessToken } = await oauth2CodeAuthenticationApi(codeParam);
   const { isBound } = await checkOauth2UserBindApi({ accessToken });
   if (isBound) {
-    authStore.authLogin({ accessToken });
+    authStore.authLogin({ secretKey: accessToken });
   } else {
-    router.push({ name: 'OAuth2BindUser', query: { accessToken } });
+    router.push({ name: 'OAuth2BindUser', query: { secretKey: accessToken } });
   }
 }
 

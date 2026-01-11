@@ -46,7 +46,7 @@ function handleMessage(data: string) {
     loading.value = true;
     try {
       authStore.authLogin({
-        accessToken: message.data,
+        secretKey: message.data,
       });
     } finally {
       loading.value = false;

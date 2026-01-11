@@ -55,14 +55,14 @@ const formSchema = computed((): VbenFormSchema[] => {
 
 async function handleSubmit(params: any) {
   const routeParams = router.currentRoute.value.query;
-  const { accessToken } = routeParams;
+  const { secretKey } = routeParams;
   const userBind = {
-    accessToken: routeParams.accessToken,
+    secretKey,
     username: params.phoneNumber,
     verificationCode: params.code,
   };
   await oauth2BindUserApi(userBind);
-  authStore.authLogin({ accessToken });
+  authStore.authLogin({ secretKey });
 }
 </script>
 
