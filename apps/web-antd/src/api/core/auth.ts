@@ -36,7 +36,7 @@ export async function loginApi(data: AuthApi.LoginParams) {
  */
 export async function refreshTokenApi() {
   const response = await baseRequestClient.post('/auth/refresh', {
-    refreshToken: localStorage.getItem('refreshToken'),
+    refreshToken: localStorage.getItem('refreshToken') ?? '',
   });
   if (response.data && response.status >= 200 && response.status < 400) {
     const result = response.data.data;
@@ -59,8 +59,8 @@ export async function refreshTokenApi() {
  */
 export async function logoutApi() {
   return baseRequestClient.post('/auth/logout', {
-    accessToken: localStorage.getItem('accessToken'),
-    refreshToken: localStorage.getItem('refreshToken'),
+    accessToken: localStorage.getItem('accessToken') ?? '',
+    refreshToken: localStorage.getItem('refreshToken') ?? '',
   });
 }
 

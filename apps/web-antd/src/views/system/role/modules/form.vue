@@ -3,8 +3,6 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
-import type { SystemRoleApi } from '#/api/system/role';
-
 import { computed, nextTick, ref } from 'vue';
 
 import { Tree, useVbenDrawer } from '@vben/common-ui';
@@ -21,7 +19,7 @@ import { useFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
 
-const formData = ref<SystemRoleApi.SystemRole>();
+const formData = ref();
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
@@ -50,12 +48,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   async onOpenChange(isOpen) {
     if (isOpen) {
-      const data = drawerApi.getData<SystemRoleApi.SystemRole>();
+      const data = drawerApi.getData();
       formApi.resetForm();
 
       if (data) {
         formData.value = data;
-        id.value = data.id;
+        id.value = data.roleId;
       } else {
         id.value = undefined;
       }
@@ -83,9 +81,9 @@ async function loadPermissions() {
 }
 
 const getDrawerTitle = computed(() => {
-  return formData.value?.id
-    ? $t('common.edit', $t('system.role.name'))
-    : $t('common.create', $t('system.role.name'));
+  return formData.value?.roleId
+    ? $t('common.edit', $t('system.role.roleName'))
+    : $t('common.create', $t('system.role.roleName'));
 });
 
 function getNodeClass(node: Recordable<any>) {
