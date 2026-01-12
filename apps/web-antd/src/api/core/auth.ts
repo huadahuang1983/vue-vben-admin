@@ -22,19 +22,36 @@ export namespace AuthApi {
  * 登录
  */
 export async function loginApi(data: AuthApi.LoginParams) {
-  const body = await requestClient.post('/auth/login', data, {
+  const response = await requestClient.post('/auth/login', data, {
     responseReturn: 'raw',
   });
-  return body.data as AuthApi.LoginResult;
+  const result = response.data;
+  localStorage.setItem('accessToken', result.accessToken);
+  localStorage.setItem('refreshToken', result.refreshToken);
+  return result as AuthApi.LoginResult;
 }
 
 /**
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/auth/refresh', {
-    withCredentials: true,
+  const response = await baseRequestClient.post('/auth/refresh', {
+    refreshToken: localStorage.getItem('refreshToken'),
   });
+  if (response.data && response.status >= 200 && response.status < 400) {
+    const result = response.data.data;
+    localStorage.setItem('accessToken', result.accessToken);
+    localStorage.setItem('refreshToken', result.refreshToken);
+    return {
+      data: result.accessToken,
+      status: response.status,
+    } as AuthApi.RefreshTokenResult;
+  } else {
+    return {
+      data: '',
+      status: response.status,
+    } as AuthApi.RefreshTokenResult;
+  }
 }
 
 /**
@@ -42,7 +59,8 @@ export async function refreshTokenApi() {
  */
 export async function logoutApi() {
   return baseRequestClient.post('/auth/logout', {
-    withCredentials: true,
+    accessToken: localStorage.getItem('accessToken'),
+    refreshToken: localStorage.getItem('refreshToken'),
   });
 }
 
