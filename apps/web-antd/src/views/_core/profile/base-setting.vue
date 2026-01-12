@@ -35,6 +35,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         mode: 'tags',
         options: roleOptions,
+        disabled: true,
       },
       label: '角色',
     },
