@@ -12,6 +12,7 @@ import {
   loadAllEnabledRoleApi,
   updateMyUserInfoApi,
 } from '#/api';
+import { $t } from '#/locales';
 
 const profileBaseSettingRef = ref();
 
@@ -20,9 +21,9 @@ const roleOptions = ref<BasicOption[]>();
 const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
-      fieldName: 'realName',
+      fieldName: 'nickname',
       component: 'Input',
-      label: '姓名',
+      label: $t('profile.userInfo.nickname'),
     },
     {
       fieldName: 'username',
@@ -30,7 +31,7 @@ const formSchema = computed((): VbenFormSchema[] => {
       componentProps: {
         disabled: true,
       },
-      label: '用户名',
+      label: $t('profile.userInfo.username'),
     },
     {
       fieldName: 'roles',
@@ -40,12 +41,12 @@ const formSchema = computed((): VbenFormSchema[] => {
         options: roleOptions,
         disabled: true,
       },
-      label: '角色',
+      label: $t('profile.userInfo.roles'),
     },
     {
-      fieldName: 'desc',
+      fieldName: 'description',
       component: 'Textarea',
-      label: '个人简介',
+      label: $t('profile.userInfo.description'),
     },
   ];
 });
@@ -61,7 +62,13 @@ async function loadRoleOptions() {
 onMounted(async () => {
   await loadRoleOptions();
   const data = await getUserInfoApi();
-  profileBaseSettingRef.value.getFormApi().setValues(data);
+  const formValues = {
+    nickname: data.realName,
+    username: data.username,
+    roles: data.roles,
+    description: data.desc,
+  };
+  profileBaseSettingRef.value.getFormApi().setValues(formValues);
 });
 
 async function handleSubmit(values: any) {

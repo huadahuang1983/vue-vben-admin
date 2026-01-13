@@ -1,7 +1,11 @@
 {
   "title": "个人中心",
   "userInfo": {
-    "title": "个人信息"
+    "title": "个人信息",
+    "nickname": "昵称",
+    "username": "用户名",
+    "roles": "角色",
+    "description": "个人简介"
   },
   "securitySetting": {
     "title": "安全设置",
