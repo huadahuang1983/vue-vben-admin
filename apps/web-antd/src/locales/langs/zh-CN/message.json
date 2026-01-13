@@ -74,6 +74,7 @@
   },
   "myNotification": {
     "title": "我的消息",
-    "markRead": "标记已读"
+    "markRead": "标记已读",
+    "markAll": "标记所有"
   }
 }

@@ -14,7 +14,10 @@ import {
   clearNotificationApi,
   loadLatestNotificationApi,
   markAllNotificationApi,
+  markMyNotificationApi,
+  removeMyNotificationApi,
 } from '#/api';
+import defaultAvatar from '#/assets/images/mdi--user.png';
 
 defineOptions({
   name: 'MyNotification',
@@ -23,7 +26,6 @@ defineOptions({
 const router = useRouter();
 const accessStore = useAccessStore();
 const notifications = ref<NotificationItem[]>([]);
-
 const showDot = computed(() =>
   notifications.value.some((item) => !item.isRead),
 );
@@ -59,26 +61,31 @@ accessStore.$subscribe((mutation, state) => {
 
 function handleMessage(body: string) {
   const returnData = JSON.parse(body);
+  const { id, data } = returnData;
   const msg = {
-    id: returnData.id,
-    title: returnData.title,
-    message: returnData.content,
-    date: returnData.time,
-    avatar: returnData.avatar,
-    isRead: false,
+    id,
+    title: data.title,
+    message: data.content,
+    date: data.time,
+    avatar: data.avatar ?? defaultAvatar,
+    isRead: data.isRead,
   };
   notifications.value.push(msg);
-  message.info(returnData.content);
+  message.info(data.content);
 }
 
 onMounted(async () => {
   connectServer();
   const list = await loadLatestNotificationApi(10);
+  list.forEach((item: any) => {
+    item.avatar = item.avatar ?? defaultAvatar;
+    item.id = item.messageNotificationId;
+  });
   notifications.value = [...notifications.value, ...list];
 });
 
 async function handleNoticeClear() {
-  notifications.value = [];
+  notifications.value.length = 0;
   await clearNotificationApi();
 }
 
@@ -88,7 +95,17 @@ async function handleMakeAll() {
 }
 
 function handleViewAll() {
-  router.push('/message/notification/my-list');
+  router.push({ name: 'MyNotificationList' });
+}
+
+function handleRead(item: NotificationItem) {
+  item.isRead = true;
+  markMyNotificationApi([item.id]);
+}
+
+async function handleRemove(item: NotificationItem) {
+  notifications.value = notifications.value.filter((i) => i.id !== item.id);
+  await removeMyNotificationApi([item.id]);
 }
 </script>
 <template>
@@ -98,5 +115,7 @@ function handleViewAll() {
     @clear="handleNoticeClear"
     @make-all="handleMakeAll"
     @view-all="handleViewAll"
+    @read="handleRead"
+    @remove="handleRemove"
   />
 </template>
