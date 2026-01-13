@@ -27,6 +27,9 @@ const formSchema = computed((): VbenFormSchema[] => {
     {
       fieldName: 'username',
       component: 'Input',
+      componentProps: {
+        disabled: true,
+      },
       label: '用户名',
     },
     {
