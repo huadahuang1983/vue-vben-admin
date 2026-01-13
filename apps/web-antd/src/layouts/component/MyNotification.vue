@@ -30,7 +30,15 @@ const showDot = computed(() =>
 
 const sse = ref();
 
+function disconnectServer() {
+  if (sse.value) {
+    sse.value.close();
+    sse.value = undefined;
+  }
+}
+
 function connectServer() {
+  disconnectServer();
   const eventSource = new EventSourcePolyfill(`/api/message/sse`, {
     heartbeatTimeout: 300_000,
     headers: {
@@ -42,6 +50,12 @@ function connectServer() {
     handleMessage(event.data);
   });
 }
+
+accessStore.$subscribe((mutation, state) => {
+  if (state.accessToken) {
+    connectServer();
+  }
+});
 
 function handleMessage(body: string) {
   const returnData = JSON.parse(body);
@@ -62,6 +76,7 @@ onMounted(async () => {
   const list = await loadLatestNotificationApi(10);
   notifications.value = [...notifications.value, ...list];
 });
+
 async function handleNoticeClear() {
   notifications.value = [];
   await clearNotificationApi();

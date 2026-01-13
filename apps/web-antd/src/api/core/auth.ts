@@ -41,7 +41,7 @@ export async function refreshTokenApi() {
   if (response.data && response.status >= 200 && response.status < 400) {
     const result = response.data.data;
     localStorage.setItem('accessToken', result.accessToken);
-    localStorage.setItem('refreshToken', result.refreshToken);
+
     return {
       data: result.accessToken,
       status: response.status,
