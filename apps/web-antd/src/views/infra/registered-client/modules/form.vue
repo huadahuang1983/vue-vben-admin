@@ -85,12 +85,17 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState((prev) => {
         return {
           schema: prev.schema?.map((item) => {
-            if (item.fieldName === 'clientSecret') {
+            if (item.fieldName === 'clientId') {
               return {
                 ...item,
                 disabled: !!values.id,
+              };
+            }
+            if (item.fieldName === 'clientSecret') {
+              return {
+                ...item,
                 dependencies: {
-                  required: () => !values.id,
+                  show: () => !values.id,
                   triggerFields: ['clientSecret'],
                 },
               };
