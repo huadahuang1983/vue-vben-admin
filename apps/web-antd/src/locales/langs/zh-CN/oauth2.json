@@ -1,0 +1,49 @@
+{
+  "copySecret": "复制密钥",
+  "registeredClient": {
+    "title": "终端管理",
+    "name": "终端",
+    "field": {
+      "clientId": "终端ID",
+      "clientSecret": "密钥",
+      "clientName": "名称",
+      "clientIdIssuedAt": "签发时间",
+      "clientSecretExpiresAt": "到期时间",
+      "clientAuthenticationMethods": "认证方法",
+      "authorizationGrantTypes": "授权方式",
+      "redirectUris": "跳转地址",
+      "postLogoutRedirectUris": "登出后跳转地址",
+      "scopes": "范围",
+      "clientSettings": "终端配置",
+      "tokenSettings": "token配置",
+      "requireAuthorizationConsent": "授权确认",
+      "accessTokenTimeToLive": "Access Token有效期(秒)",
+      "refreshTokenTimeToLive": "Refresh Token有效期(秒)",
+      "authorizationCodeTimeToLive": "Authorization Code有效期(秒)",
+      "deviceCodeTimeToLive": "Device Code有效期(秒)"
+    }
+  },
+  "clientRegistration": {
+    "title": "密钥管理",
+    "name": "密钥",
+    "field": {
+      "registrationId": "ID",
+      "clientId": "终端ID",
+      "clientSecret": "密钥",
+      "clientName": "名称",
+      "clientAuthenticationMethod": "认证方法",
+      "authorizationGrantType": "授权方式",
+      "redirectUri": "跳转地址",
+      "authorizationUri": "授权地址",
+      "scopes": "范围",
+      "tokenUri": "token地址",
+      "jwkSetUri": "jwk地址",
+      "issuerUri": "issuer地址",
+      "userInfoUri": "用户信息地址",
+      "userInfoAuthenticationMethod": "用户信息认证方法",
+      "userNameAttributeName": "用户名属性",
+      "configurationMetadata": "配置元数据",
+      "configurationExtension": "配置扩展"
+    }
+  }
+}
