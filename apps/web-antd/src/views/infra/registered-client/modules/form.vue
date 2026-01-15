@@ -47,6 +47,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       const { values, disabled } = drawerApi.getData<Record<string, any>>();
       if (values) {
+        const scopes = values.scopes || 'openid,profile';
         const clientSettings =
           values.clientSettings ||
           '{"settings.client.require-authorization-consent":true}';
@@ -76,6 +77,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
             : ['authorization_code'],
           clientSettings,
           tokenSettings,
+          scopes,
         });
       }
       const enableEdit = !!disabled;
