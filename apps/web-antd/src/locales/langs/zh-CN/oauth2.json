@@ -1,8 +1,8 @@
 {
   "copySecret": "复制密钥",
   "registeredClient": {
-    "title": "终端管理",
-    "name": "终端",
+    "title": "OAuth2终端",
+    "name": "OAuth2终端",
     "field": {
       "clientId": "终端ID",
       "clientSecret": "密钥",
@@ -24,8 +24,8 @@
     }
   },
   "clientRegistration": {
-    "title": "密钥管理",
-    "name": "密钥",
+    "title": "OAuth2密钥",
+    "name": "OAuth2密钥",
     "field": {
       "registrationId": "ID",
       "clientId": "终端ID",
