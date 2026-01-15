@@ -61,7 +61,15 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 function onCreate() {
-  formDrawerApi.setData({ values: { status: 'enabled' } }).open();
+  formDrawerApi
+    .setData({
+      values: {
+        status: 'enabled',
+        configurationMetadata: '{}',
+        configurationExtension: '{}',
+      },
+    })
+    .open();
 }
 
 const onDelete = (removeRecords: any[]) => {
