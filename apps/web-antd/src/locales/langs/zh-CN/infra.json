@@ -80,5 +80,24 @@
       "status": "状态",
       "errorMessage": "错误信息"
     }
+  },
+  "appVersion": {
+    "title": "版本管理",
+    "name": "版本",
+    "field": {
+      "title": "标题",
+      "appName": "应用名称",
+      "appCode": "应用代码",
+      "versionNo": "版本号",
+      "version": "版本号",
+      "changeLog": "变更日志",
+      "releaseDesc": "发布说明",
+      "releaseTime": "发布时间",
+      "managerName": "管理员名称",
+      "downloadUrl": "下载地址",
+      "isForceUpdate": "是否强制更新",
+      "fileSize": "文件大小",
+      "minVersion": "最低支持版本"
+    }
   }
 }
