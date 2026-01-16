@@ -173,8 +173,8 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'title',
       title: $t('message.messageHistory.field.title'),
@@ -188,30 +188,39 @@ export function useColumns(
     {
       field: 'mediumType',
       title: $t('message.messageHistory.field.mediumType'),
+      width: 80,
     },
     {
       field: 'messageType',
       title: $t('message.messageHistory.field.messageType'),
+      width: 120,
     },
     { field: 'bizType', title: $t('message.messageHistory.field.bizType') },
     {
       field: 'receiverId',
       title: $t('message.messageHistory.field.receiverId'),
     },
-    { field: 'sendTime', title: $t('message.messageHistory.field.sendTime') },
     {
-      field: 'senderName',
-      title: $t('message.messageHistory.field.senderName'),
-    },
-    { field: 'channelId', title: $t('message.messageHistory.field.channelId') },
-    { field: 'status', title: $t('message.messageHistory.field.status') },
-    {
-      field: 'deliveryStatus',
-      title: $t('message.messageHistory.field.deliveryStatus'),
+      field: 'sendTime',
+      title: $t('message.messageHistory.field.sendTime'),
+      formatter: 'formatDate',
+      width: 110,
     },
     {
-      field: 'deliveryTime',
-      title: $t('message.messageHistory.field.deliveryTime'),
+      field: 'channelId',
+      title: $t('message.messageHistory.field.channelId'),
+      width: 120,
+    },
+    {
+      field: 'status',
+      title: $t('message.messageHistory.field.status'),
+      cellRender: {
+        attrs: {
+          dictType: 'SendStatus',
+        },
+        name: 'CellDataDictTag',
+      },
+      width: 60,
     },
     {
       align: 'center',

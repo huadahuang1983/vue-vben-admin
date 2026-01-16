@@ -276,8 +276,8 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: '序号', type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'clientName',
       title: $t('oauth2.registeredClient.field.clientName'),
@@ -287,19 +287,32 @@ export function useColumns(
         },
         name: 'CellValueLink',
       },
+      width: 200,
     },
     {
       field: 'clientId',
       title: $t('oauth2.registeredClient.field.clientId'),
     },
     {
+      field: 'authorizationGrantTypes',
+      title: $t('oauth2.registeredClient.field.authorizationGrantTypes'),
+      width: 200,
+    },
+    {
+      field: 'clientAuthenticationMethods',
+      title: $t('oauth2.registeredClient.field.clientAuthenticationMethods'),
+      width: 140,
+    },
+    {
       field: 'clientSecretExpiresAt',
       title: $t('oauth2.registeredClient.field.clientSecretExpiresAt'),
       formatter: ['formatDate', 'yyyy-MM-dd'],
+      width: 110,
     },
     {
       field: 'scopes',
       title: $t('oauth2.registeredClient.field.scopes'),
+      width: 200,
     },
     {
       align: 'center',

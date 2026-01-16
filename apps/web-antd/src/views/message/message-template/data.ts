@@ -223,14 +223,17 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'templateCode',
       title: $t('message.messageTemplate.field.templateCode'),
       cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
     },
-    { field: 'title', title: $t('message.messageTemplate.field.title') },
+    {
+      field: 'title',
+      title: $t('message.messageTemplate.field.title'),
+    },
     {
       field: 'mediumType',
       title: $t('message.messageTemplate.field.mediumType'),
@@ -240,6 +243,7 @@ export function useColumns(
         },
         name: 'CellDataDictTag',
       },
+      width: 80,
     },
     {
       field: 'messageType',
@@ -250,11 +254,16 @@ export function useColumns(
         },
         name: 'CellDataDictTag',
       },
+      width: 120,
     },
-    { field: 'bizType', title: $t('message.messageTemplate.field.bizType') },
+    {
+      field: 'bizType',
+      title: $t('message.messageTemplate.field.bizType'),
+    },
     {
       field: 'channelId',
       title: $t('message.messageTemplate.field.channelId'),
+      width: 120,
     },
     {
       field: 'status',
@@ -265,6 +274,7 @@ export function useColumns(
         },
         name: 'CellDataDictTag',
       },
+      width: 60,
     },
     {
       align: 'center',

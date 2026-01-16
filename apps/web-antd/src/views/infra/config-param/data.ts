@@ -96,8 +96,8 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'paramCode',
       title: $t('infra.configParam.field.paramCode'),
@@ -114,6 +114,7 @@ export function useColumns(
         name: 'CellDataDictTag',
         attrs: { dictType: 'ConfigParamType' },
       },
+      width: 60,
     },
     { field: 'paramValue', title: $t('infra.configParam.field.paramValue') },
     {
@@ -123,6 +124,7 @@ export function useColumns(
         name: 'CellDataDictTag',
         attrs: { dictType: 'GenericStatus' },
       },
+      width: 60,
     },
     { field: 'remark', title: $t('infra.configParam.field.remark') },
     {

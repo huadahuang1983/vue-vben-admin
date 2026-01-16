@@ -122,8 +122,8 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'originalFilename',
       title: $t('storage.fileDetail.field.originalFilename'),
@@ -134,13 +134,23 @@ export function useColumns(
       field: 'size',
       title: $t('storage.fileDetail.field.size'),
       formatter: 'formatDataStorageSize',
+      width: 80,
     },
-    { field: 'contentType', title: $t('storage.fileDetail.field.contentType') },
-    { field: 'platform', title: $t('storage.fileDetail.field.platform') },
+    {
+      field: 'contentType',
+      title: $t('storage.fileDetail.field.contentType'),
+      width: 120,
+    },
+    {
+      field: 'platform',
+      title: $t('storage.fileDetail.field.platform'),
+      width: 120,
+    },
     {
       field: 'createTime',
       title: $t('storage.fileDetail.field.uploadTime'),
       formatter: 'formatDateTime',
+      width: 110,
     },
     {
       align: 'center',

@@ -122,8 +122,7 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
     {
       field: 'loginName',
       title: $t('user.userLogin.field.loginName'),
@@ -135,9 +134,28 @@ export function useColumns(
       },
     },
     { field: 'loginIp', title: $t('user.userLogin.field.loginIp') },
-    { field: 'loginTime', title: $t('user.userLogin.field.loginTime') },
+    {
+      field: 'loginTime',
+      title: $t('user.userLogin.field.loginTime'),
+      formatter: 'formatDateTime',
+      width: 160,
+    },
     { field: 'source', title: $t('user.userLogin.field.source') },
-    { field: 'browserName', title: $t('user.userLogin.field.browserName') },
-    { field: 'osName', title: $t('user.userLogin.field.osName') },
+    {
+      field: 'browserName',
+      title: $t('user.userLogin.field.browserName'),
+      width: 120,
+    },
+    {
+      field: 'browserVersion',
+      title: $t('user.userLogin.field.browserVersion'),
+      width: 100,
+    },
+    { field: 'osName', title: $t('user.userLogin.field.osName'), width: 120 },
+    {
+      field: 'osVersion',
+      title: $t('user.userLogin.field.osVersion'),
+      width: 100,
+    },
   ];
 }

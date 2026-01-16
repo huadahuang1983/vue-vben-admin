@@ -137,8 +137,17 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    {
+      field: 'userId',
+      title: $t('user.userThirdParty.field.userId'),
+      width: 200,
+    },
+    {
+      field: 'source',
+      title: $t('user.userThirdParty.field.source'),
+      width: 120,
+    },
     {
       field: 'uuid',
       title: $t('user.userThirdParty.field.uuid'),

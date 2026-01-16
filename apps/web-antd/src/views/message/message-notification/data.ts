@@ -143,20 +143,27 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'title',
       title: $t('message.messageNotification.field.title'),
       cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
+      width: 200,
+    },
+    {
+      field: 'content',
+      title: $t('message.messageNotification.field.content'),
     },
     {
       field: 'bizType',
       title: $t('message.messageNotification.field.bizType'),
+      width: 160,
     },
     {
       field: 'receiverId',
       title: $t('message.messageNotification.field.receiverId'),
+      width: 160,
     },
     {
       field: 'isRead',
@@ -167,6 +174,7 @@ export function useColumns(
     {
       field: 'senderName',
       title: $t('message.messageNotification.field.senderName'),
+      width: 100,
     },
     {
       field: 'sendTime',

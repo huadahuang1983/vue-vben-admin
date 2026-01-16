@@ -116,26 +116,29 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: $t('common.sequence'), type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: $t('common.sequence'), type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'nickname',
       title: $t('user.userInfo.field.nickname'),
       cellRender: { name: 'CellValueLink', attrs: { onClick: onActionClick } },
     },
-    { field: 'phoneNumber', title: $t('user.userInfo.field.phoneNumber') },
+    {
+      field: 'phoneNumber',
+      title: $t('user.userInfo.field.phoneNumber'),
+    },
+    { field: 'email', title: $t('user.userInfo.field.email') },
     {
       field: 'gender',
       title: $t('user.userInfo.field.gender'),
       cellRender: { name: 'CellDataDictTag', attrs: { dictType: 'Gender' } },
       width: 40,
     },
-    { field: 'email', title: $t('user.userInfo.field.email') },
     {
       field: 'registerTime',
       title: $t('user.userInfo.field.registerTime'),
       formatter: 'formatDateTime',
-      width: 110,
+      width: 160,
     },
     {
       field: 'userStatus',

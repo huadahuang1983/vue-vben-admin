@@ -213,11 +213,12 @@ export function useColumns(
   onActionClick: OnActionClickFn,
 ): VxeTableGridOptions['columns'] {
   return [
-    { title: '序号', type: 'seq', width: 50 },
-    { align: 'left', type: 'checkbox', width: 50 },
+    { title: '序号', type: 'seq', width: 40 },
+    { align: 'left', type: 'checkbox', width: 40 },
     {
       field: 'registrationId',
       title: $t('oauth2.clientRegistration.field.registrationId'),
+      width: 160,
     },
     {
       field: 'clientName',
@@ -228,6 +229,7 @@ export function useColumns(
         },
         name: 'CellValueLink',
       },
+      width: 160,
     },
     {
       field: 'clientId',
@@ -240,6 +242,7 @@ export function useColumns(
     {
       field: 'scopes',
       title: $t('oauth2.clientRegistration.field.scopes'),
+      width: 200,
     },
     {
       align: 'center',
