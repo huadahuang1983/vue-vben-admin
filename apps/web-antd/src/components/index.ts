@@ -1,4 +1,4 @@
-export { default as ImageCropperUpload } from './cropper/image-cropper-upload.vue';
+export { default as ImageCropperUploadModal } from './cropper/image-cropper-upload-modal.vue';
 export { default as ImageCropper } from './cropper/image-cropper.vue';
 export { default as DataDictRadioGroup } from './data-dict/data-dict-radio-group.vue';
 export { default as DataDictSelect } from './data-dict/data-dict-select.vue';

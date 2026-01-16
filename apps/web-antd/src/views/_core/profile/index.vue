@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { Profile } from '@vben/common-ui';
 import { useUserStore } from '@vben/stores';
 
+import ProfileAvatarSetting from './avatar-setting.vue';
 import ProfileBase from './base-setting.vue';
 import ProfileNotificationSetting from './notification-setting.vue';
 import ProfilePasswordSetting from './password-setting.vue';
@@ -30,6 +31,10 @@ const tabs = ref([
     label: '新消息提醒',
     value: 'notice',
   },
+  {
+    label: '修改头像',
+    value: 'avatar',
+  },
 ]);
 </script>
 <template>
@@ -44,6 +49,7 @@ const tabs = ref([
       <ProfileSecuritySetting v-if="tabsValue === 'security'" />
       <ProfilePasswordSetting v-if="tabsValue === 'password'" />
       <ProfileNotificationSetting v-if="tabsValue === 'notice'" />
+      <ProfileAvatarSetting v-if="tabsValue === 'avatar'" />
     </template>
   </Profile>
 </template>

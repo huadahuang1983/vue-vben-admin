@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import VueCropper from 'vue-cropperjs';
 
 import {
@@ -28,38 +28,29 @@ import {
 
 import 'cropperjs/dist/cropper.css';
 
-interface Props {
-  src?: string;
+interface ImageCropperProps {
+  imgSrc?: string;
   cropRound?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  src: '',
-  cropRound: false,
-});
+const props = defineProps<ImageCropperProps>();
 
 const emit = defineEmits<{
   (e: 'crop', data: string): void;
 }>();
 
 const cropper = ref<any>(null);
-const imgSrc = ref('');
 const scaleX = ref<null | number>(null);
 const scaleY = ref<null | number>(null);
 
+const { imgSrc, cropRound } = toRefs(props);
+
 const getCropperWrapperCls = computed(() => {
   const cls = ['image-cropper-wrapper'];
-  if (props.cropRound) {
+  if (cropRound.value) {
     cls.push('image-cropper-wrapper-round');
   }
   return cls;
-});
-
-onMounted(() => {
-  const src = props.src;
-  if (src) {
-    imgSrc.value = src;
-  }
 });
 
 const cropImage = () => {

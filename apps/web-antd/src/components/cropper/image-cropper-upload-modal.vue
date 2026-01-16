@@ -45,7 +45,7 @@ const [Modal, modalApi] = useVbenModal({
     <ImageCropper
       :ref="imageCropper"
       :crop-round="imageCropRound"
-      :src="imageSrc"
+      :img-src="imageSrc"
     />
   </Modal>
 </template>
