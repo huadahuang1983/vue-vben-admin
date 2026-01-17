@@ -36,6 +36,8 @@
   "data": "数据",
   "replace": "更换",
   "sequence": "序号",
+  "timeStart": "开始时间",
+  "timeEnd": "结束时间",
   "image": {
     "zoomIn": "放大",
     "zoomOut": "缩小",

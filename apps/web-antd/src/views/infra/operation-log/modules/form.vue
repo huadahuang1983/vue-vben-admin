@@ -25,7 +25,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState({ commonConfig: { disabled: enableEdit } });
     }
   },
-  title: $t('user.userLogin.title'),
+  title: $t('infra.operationLog.title'),
 });
 </script>
 <template>

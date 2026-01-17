@@ -41,44 +41,22 @@
       "remark": "备注"
     }
   },
-  "region": {
-    "title": "行政区划",
-    "field": {
-      "regionCode": "代码",
-      "regionName": "名称",
-      "regionLevel": "级别",
-      "parentId": "上级",
-      "parentName": "上级名称",
-      "isLeaf": "是否叶子",
-      "orderNo": "排序",
-      "status": "状态",
-      "remark": "备注"
-    }
-  },
-  "measureUnit": {
-    "title": "计量单位",
-    "field": {
-      "name": "名称",
-      "unitType": "类型",
-      "abbreviation": "简写",
-      "symbol": "符号",
-      "convertUnitName": "换算单位",
-      "convertRatio": "换算比例",
-      "orderNo": "排序",
-      "status": "状态",
-      "remark": "备注"
-    }
-  },
   "operationLog": {
     "title": "操作日志",
     "field": {
-      "title": "标题",
-      "userId": "操作员编号",
-      "operateTime": "操作时间",
-      "ipAddress": "IP地址",
-      "uri": "访问地址",
+      "operationType": "操作类型",
+      "operationTime": "操作时间",
+      "operationIp": "操作IP",
+      "userId": "用户编号",
+      "details": "详情描述",
+      "affectedResource": "资源对象",
+      "inputValues": "输入数据值",
+      "bizType": "业务类型",
+      "requestUrl": "请求URL",
+      "requestMethod": "请求方法",
+      "bizId": "业务单据号",
       "status": "状态",
-      "errorMessage": "错误信息"
+      "outputContent": "输出内容"
     }
   },
   "appVersion": {
