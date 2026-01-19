@@ -207,8 +207,25 @@ export function useFormSchema(): VbenFormSchema[] {
       },
       fieldName: 'redirectUris',
       label: $t('oauth2.registeredClient.field.redirectUris'),
-      rules: '',
+      rules: 'required',
       description: '',
+      dependencies: {
+        required(values) {
+          const { authorizationGrantTypes } = values;
+          if (!authorizationGrantTypes) {
+            return false;
+          }
+          return authorizationGrantTypes.includes('authorization_code');
+        },
+        show(values) {
+          const { authorizationGrantTypes } = values;
+          if (!authorizationGrantTypes) {
+            return false;
+          }
+          return authorizationGrantTypes.includes('authorization_code');
+        },
+        triggerFields: ['authorizationGrantTypes'],
+      },
     },
     {
       component: 'Textarea',
