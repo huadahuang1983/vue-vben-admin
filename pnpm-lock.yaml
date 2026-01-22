@@ -660,6 +660,9 @@ importers:
       '@types/js-base64':
         specifier: ^3.3.1
         version: 3.3.1
+      '@types/js-cookie':
+        specifier: ^3.0.6
+        version: 3.0.6
       '@types/vue-cropperjs':
         specifier: ^4.1.6
         version: 4.1.6(typescript@5.9.3)
@@ -729,6 +732,9 @@ importers:
       js-base64:
         specifier: ^3.7.8
         version: 3.7.8
+      js-cookie:
+        specifier: 3.0.5
+        version: 3.0.5
       pinia:
         specifier: ^3.0.3
         version: 3.0.4(typescript@5.9.3)(vue@3.5.24(typescript@5.9.3))
@@ -4477,6 +4483,9 @@ packages:
   '@types/js-base64@3.3.1':
     resolution: {integrity: sha512-Zw33oQNAvDdAN9b0IE5stH0y2MylYvtU7VVTKEJPxhyM2q57CVaNJhtJW258ah24NRtaiA23tptUmVn3dmTKpw==}
     deprecated: This is a stub types definition. js-base64 provides its own type definitions, so you do not need this installed.
+
+  '@types/js-cookie@3.0.6':
+    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
 
   '@types/json-bigint@1.0.4':
     resolution: {integrity: sha512-ydHooXLbOmxBbubnA7Eh+RpBzuaIiQjh8WGJYQB50JFGFrdxW7JzVlyEV7fAXw0T2sqJ1ysTneJbiyNLqZRAag==}
@@ -13655,6 +13664,8 @@ snapshots:
   '@types/js-base64@3.3.1':
     dependencies:
       js-base64: 3.7.8
+
+  '@types/js-cookie@3.0.6': {}
 
   '@types/json-bigint@1.0.4': {}
 

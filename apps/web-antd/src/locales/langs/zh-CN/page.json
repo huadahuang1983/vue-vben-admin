@@ -11,7 +11,16 @@
     "resetPasswordDescription": "请输入新密码，如果时间过期，请重新操作忘记密码",
     "oauth2BindUser": "绑定用户",
     "oauth2BindUserDescription": "请输入手机号码进行账户绑定",
-    "bindUser": "绑定"
+    "bindUser": "绑定",
+    "oauth2AuthorizationConsent": "授权确认",
+    "oauth2AuthorizationConsentDescription": "请确认是否授权以下应用访问您的信息",
+    "authorize": "授权",
+    "cancel": "取消",
+    "clientInfo": "应用信息",
+    "applicationName": "应用名称",
+    "applicationDescription": "应用描述",
+    "requestedPermissions": "请求的权限",
+    "redirectUri": "跳转地址"
   },
   "dashboard": {
     "title": "概览",

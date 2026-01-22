@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
+
 import { baseRequestClient, requestClient } from '#/api/request';
 
 export namespace AuthApi {
@@ -28,6 +31,11 @@ export async function loginApi(data: AuthApi.LoginParams) {
   const result = response.data;
   localStorage.setItem('accessToken', result.accessToken);
   localStorage.setItem('refreshToken', result.refreshToken);
+  const expriresInDate = dayjs().add(result.expiresIn, 'second');
+  Cookies.set('AccessToken', result.accessToken, {
+    expires: expriresInDate.toDate(),
+    path: '/',
+  });
   return result as AuthApi.LoginResult;
 }
 

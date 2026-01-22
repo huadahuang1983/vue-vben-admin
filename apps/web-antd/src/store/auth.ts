@@ -37,6 +37,12 @@ export const useAuthStore = defineStore('auth', () => {
 
       // 如果成功获取到 accessToken
       if (accessToken) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect_url = urlParams.get('redirect_url');
+        if (redirect_url) {
+          window.location.href = redirect_url;
+          return;
+        }
         accessStore.setAccessToken(accessToken);
 
         // 获取用户信息并存储到 accessStore 中

@@ -31,6 +31,16 @@ export interface OAuth2CodeLoginParam {
   state: any;
 }
 
+export interface OAuth2AuthorizationConsentInfo {
+  clientId: string;
+  clientName: string;
+  clientDescription?: string;
+  clientIcon?: string;
+  scopes: string[];
+  redirectUri: string;
+  state?: string;
+}
+
 /**
  * 发送验证验证码，支持短信和邮件模式
  */
@@ -103,7 +113,16 @@ export function oauth2BindUserApi(params: any) {
 }
 
 /**
- *  Oauth2授权后的回调，提交code到后端进行认证
+ * 获取OAuth2授权确认页面信息
+ */
+export async function loadOAuth2AuthorizationConsentInfoApi(clientId: string) {
+  return requestClient.get<OAuth2AuthorizationConsentInfo>(
+    `/oauth2/registered-client/authorization-consent/info/${clientId}`,
+  );
+}
+
+/**
+ * Oauth2授权后的回调，提交code到后端进行认证
  */
 export async function oauth2CodeAuthenticationApi(
   params: OAuth2CodeLoginParam,

@@ -117,9 +117,22 @@ const coreRoutes: RouteRecordRaw[] = [
       ignoreAccess: true,
     },
     name: 'OAuth2CodeLogin',
-    path: '/oauth2/code-login/:registrationId',
+    path: '/auth/oauth2/code-login/:registrationId',
     component: () =>
       import('#/views/_core/authentication/oauth2-code-login.vue'),
+  },
+  {
+    meta: {
+      hideInMenu: true,
+      title: $t('common.login'),
+      ignoreAccess: true,
+    },
+    name: 'OAuth2AuthorizationCodeConsent',
+    path: '/auth/oauth2/authorization-code-consent',
+    component: () =>
+      import(
+        '#/views/_core/authentication/oauth2-authorization-code-consent.vue'
+      ),
   },
 ];
 
