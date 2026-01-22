@@ -1,6 +1,3 @@
-import dayjs from 'dayjs';
-import Cookies from 'js-cookie';
-
 import { baseRequestClient, requestClient } from '#/api/request';
 
 export namespace AuthApi {
@@ -13,11 +10,13 @@ export namespace AuthApi {
   /** 登录接口返回值 */
   export interface LoginResult {
     accessToken: string;
+    expiresIn: number;
   }
 
   export interface RefreshTokenResult {
     data: string;
     status: number;
+    expiresIn: number;
   }
 }
 
@@ -29,13 +28,9 @@ export async function loginApi(data: AuthApi.LoginParams) {
     responseReturn: 'raw',
   });
   const result = response.data;
+  // 本地存储便于登出销毁
   localStorage.setItem('accessToken', result.accessToken);
   localStorage.setItem('refreshToken', result.refreshToken);
-  const expriresInDate = dayjs().add(result.expiresIn, 'second');
-  Cookies.set('AccessToken', result.accessToken, {
-    expires: expriresInDate.toDate(),
-    path: '/',
-  });
   return result as AuthApi.LoginResult;
 }
 

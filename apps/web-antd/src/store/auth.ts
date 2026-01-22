@@ -8,6 +8,8 @@ import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
 import { notification } from 'ant-design-vue';
+import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
 import { defineStore } from 'pinia';
 
 import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
@@ -33,13 +35,23 @@ export const useAuthStore = defineStore('auth', () => {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
-      const { accessToken } = await loginApi(params);
+      const oauth2Token = localStorage.getItem('OAuth2Token');
+      if (oauth2Token) {
+        params.oauth2Token = oauth2Token;
+      }
+      const { accessToken, expiresIn } = await loginApi(params);
 
       // 如果成功获取到 accessToken
       if (accessToken) {
         const urlParams = new URLSearchParams(window.location.search);
         const redirect_url = urlParams.get('redirect_url');
         if (redirect_url) {
+          const expriresInDate = dayjs().add(expiresIn, 'second');
+          // 通过Cookie传递解决跳转无法携带参数
+          Cookies.set('AccessToken', accessToken, {
+            expires: expriresInDate.toDate(),
+            path: '/',
+          });
           window.location.href = redirect_url;
           return;
         }

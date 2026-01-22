@@ -4,7 +4,7 @@ import type { OAuth2CodeLoginParam } from '#/api';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { checkOauth2UserBindApi, oauth2CodeAuthenticationApi } from '#/api';
+import { oauth2CodeAuthenticationApi } from '#/api';
 import { useAuthStore } from '#/store';
 
 defineOptions({ name: 'OAuth2Code' });
@@ -20,12 +20,16 @@ async function handleSubmit() {
     state: query.state,
     code: query.code,
   };
-  const { accessToken } = await oauth2CodeAuthenticationApi(codeParam);
-  const { isBound } = await checkOauth2UserBindApi({ accessToken });
-  if (isBound) {
-    authStore.authLogin({ secretKey: accessToken });
+  const { accessToken, mode } = await oauth2CodeAuthenticationApi(codeParam);
+  if (accessToken) {
+    if (mode === 'OIDC') {
+      authStore.authLogin({ secretKey: accessToken });
+    } else {
+      localStorage.setItem('OAuth2Token', accessToken);
+      router.push({ name: 'Login' });
+    }
   } else {
-    router.push({ name: 'OAuth2BindUser', query: { secretKey: accessToken } });
+    router.push({ name: 'Login' });
   }
 }
 

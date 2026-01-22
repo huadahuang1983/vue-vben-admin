@@ -101,17 +101,6 @@ export async function loadOauth2AuthorizeUrlApi(registrationId: string) {
   return body.data;
 }
 
-export async function checkOauth2UserBindApi(params: any) {
-  return requestClient.post(`/oauth2/user/check-bind`, params);
-}
-
-/**
- * Oauth2登录成功后的用户绑定，即外部用户编号与内部用户编号绑定
- */
-export function oauth2BindUserApi(params: any) {
-  return requestClient.post('/oauth2/user/bind', params);
-}
-
 /**
  * 获取OAuth2授权确认页面信息
  */

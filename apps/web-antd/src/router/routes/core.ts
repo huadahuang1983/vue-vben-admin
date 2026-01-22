@@ -99,15 +99,6 @@ const coreRoutes: RouteRecordRaw[] = [
           title: $t('page.auth.register'),
         },
       },
-      {
-        name: 'OAuth2BindUser',
-        path: 'oauth2/bind-user',
-        component: () =>
-          import('#/views/_core/authentication/oauth2-bind-user.vue'),
-        meta: {
-          title: $t('page.auth.oauth2BindUser'),
-        },
-      },
     ],
   },
   {
