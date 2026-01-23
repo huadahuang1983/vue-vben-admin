@@ -6,14 +6,17 @@ import { useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { useAccessStore } from '@vben/stores';
 
 import { Button, Card, Descriptions, List, Space, Tag } from 'ant-design-vue';
+import Cookies from 'js-cookie';
 
 import { loadOAuth2AuthorizationConsentInfoApi } from '#/api';
 
 defineOptions({ name: 'OAuth2AuthorizationCodeConsent' });
 
 const router = useRouter();
+const accessStore = useAccessStore();
 
 const loading = ref(false);
 const consentInfo = ref<null | OAuth2AuthorizationConsentInfo>(null);
@@ -66,7 +69,9 @@ async function handleAuthorize() {
 }
 
 function handleCancel() {
-  router.push('/auth/login');
+  Cookies.remove('AccessToken');
+  accessStore.setLoginExpired(true);
+  router.push({ name: 'Login' });
 }
 
 onMounted(async () => {

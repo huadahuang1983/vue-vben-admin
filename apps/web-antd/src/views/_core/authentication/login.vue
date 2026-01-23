@@ -2,12 +2,10 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { BasicOption } from '@vben/types';
 
-import { computed, markRaw, onMounted } from 'vue';
+import { computed, markRaw, onMounted, ref } from 'vue';
 
 import { AuthenticationLogin, SliderCaptcha, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
-
-import Cookies from 'js-cookie';
 
 import { useAuthStore } from '#/store';
 
@@ -17,7 +15,7 @@ defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
 
-const showThirdPartyLogin = true;
+const showThirdPartyLogin = ref(true);
 
 const MOCK_USER_OPTIONS: BasicOption[] = [
   {
@@ -94,12 +92,19 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-function clearAuth() {
-  Cookies.remove('AccessToken');
+function inOAuth2Binding() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectUrl = urlParams.get('redirect_url');
+  const hashRedirectUrl = !!redirectUrl;
+  const mode = urlParams.get('mode');
+  if (hashRedirectUrl) {
+    return true;
+  }
+  return mode === 'oauth2';
 }
 
 onMounted(() => {
-  clearAuth();
+  showThirdPartyLogin.value = !inOAuth2Binding();
 });
 </script>
 
@@ -108,6 +113,7 @@ onMounted(() => {
     :form-schema="formSchema"
     :loading="authStore.loginLoading"
     @submit="authStore.authLogin"
+    :show-third-party-login="showThirdPartyLogin"
   >
     <template #third-party-login>
       <ThirdPartyLogin v-if="showThirdPartyLogin" />

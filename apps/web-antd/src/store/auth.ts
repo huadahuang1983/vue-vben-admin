@@ -45,7 +45,8 @@ export const useAuthStore = defineStore('auth', () => {
       if (accessToken) {
         const urlParams = new URLSearchParams(window.location.search);
         const redirect_url = urlParams.get('redirect_url');
-        if (redirect_url) {
+        const doRedirect = !!redirect_url;
+        if (doRedirect) {
           const expriresInDate = dayjs().add(expiresIn, 'second');
           // 通过Cookie传递解决跳转无法携带参数
           Cookies.set('AccessToken', accessToken, {

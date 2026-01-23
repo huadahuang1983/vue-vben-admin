@@ -26,7 +26,7 @@ async function handleSubmit() {
       authStore.authLogin({ secretKey: accessToken });
     } else {
       localStorage.setItem('OAuth2Token', accessToken);
-      router.push({ name: 'Login' });
+      router.push({ name: 'Login', query: { mode: 'oauth2' } });
     }
   } else {
     router.push({ name: 'Login' });
