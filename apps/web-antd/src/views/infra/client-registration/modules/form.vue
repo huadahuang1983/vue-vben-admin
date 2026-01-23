@@ -29,6 +29,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       const { values, disabled } = drawerApi.getData<Record<string, any>>();
       if (values) {
+        if (!values.configurationMetadata) {
+          values.configurationMetadata =
+            '{"@class":"java.util.Collections$UnmodifiableMap"}';
+        }
+        if (!values.configurationExtension) {
+          values.configurationExtension = '{}';
+        }
         formApi.setValues(values);
       }
       const enableEdit = !!disabled;

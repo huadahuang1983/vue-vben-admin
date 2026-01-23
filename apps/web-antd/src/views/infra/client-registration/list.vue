@@ -65,8 +65,6 @@ function onCreate() {
     .setData({
       values: {
         status: 'enabled',
-        configurationMetadata: '{}',
-        configurationExtension: '{}',
       },
     })
     .open();

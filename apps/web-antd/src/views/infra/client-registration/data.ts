@@ -106,7 +106,7 @@ export function useFormSchema(): VbenFormSchema[] {
       },
       fieldName: 'authorizationUri',
       label: $t('oauth2.clientRegistration.field.authorizationUri'),
-      rules: '',
+      rules: 'required',
       description: '',
     },
     {
@@ -146,17 +146,22 @@ export function useFormSchema(): VbenFormSchema[] {
       },
       fieldName: 'userInfoUri',
       label: $t('oauth2.clientRegistration.field.userInfoUri'),
-      rules: '',
+      rules: 'required',
       description: '',
     },
     {
-      component: 'Input',
+      component: 'RadioGroup',
       componentProps: {
         class: 'mr-2',
+        options: [
+          { label: 'HEADER', value: 'header' },
+          { label: 'FORM', value: 'form' },
+          { label: 'QUERY', value: 'query' },
+        ],
       },
       fieldName: 'userInfoAuthenticationMethod',
       label: $t('oauth2.clientRegistration.field.userInfoAuthenticationMethod'),
-      rules: '',
+      rules: 'required',
       description: '',
     },
     {
