@@ -166,10 +166,5 @@ export function useColumns(
       title: $t('user.userThirdParty.field.gender'),
       width: 100,
     },
-    {
-      field: 'source',
-      title: $t('user.userThirdParty.field.source'),
-      width: 100,
-    },
   ];
 }

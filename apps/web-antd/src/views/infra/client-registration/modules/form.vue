@@ -40,7 +40,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 async function onSubmit(values: any) {
   const formData = drawerApi.getData().values;
-  values.clientRegistrationId = formData.clientRegistrationId;
+  values.registrationId = formData.registrationId;
   await saveClientRegistrationApi(values);
 }
 </script>

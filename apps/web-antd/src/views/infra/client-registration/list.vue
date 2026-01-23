@@ -54,7 +54,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
     },
     rowConfig: {
-      keyField: 'clientRegistrationId',
+      keyField: 'registrationId',
     },
   } as VxeTableGridOptions,
   gridEvents,
@@ -73,7 +73,7 @@ function onCreate() {
 }
 
 const onDelete = (removeRecords: any[]) => {
-  const recordIds = removeRecords.map((item) => item.clientRegistrationId);
+  const recordIds = removeRecords.map((item) => item.registrationId);
   removeClientRegistrationApi(recordIds).then(() => {
     gridApi.query();
   });
