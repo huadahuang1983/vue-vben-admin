@@ -47,9 +47,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       const { values, disabled } = drawerApi.getData<Record<string, any>>();
       if (values) {
-        const scopes = values.scopes || 'openid,profile';
+        const scopes = values.scopes ?? 'openid,profile';
         const clientSettings =
-          values.clientSettings ||
+          values.clientSettings ??
           '{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-authorization-consent":true,"settings.client.require-proof-key":false}';
         const clientSettingsObj = JSON.parse(clientSettings);
         for (const [key, value] of Object.entries(clientSettingsObj)) {
@@ -58,7 +58,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
             : value;
         }
         const tokenSettings =
-          values.tokenSettings ||
+          values.tokenSettings ??
           '{"@class":"java.util.Collections$UnmodifiableMap","settings.token.access-token-time-to-live":["java.time.Duration",7200.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000],"settings.token.device-code-time-to-live":["java.time.Duration",300.000000000]}';
         const tokenSettingsObj = JSON.parse(tokenSettings);
         for (const [key, value] of Object.entries(tokenSettingsObj)) {
